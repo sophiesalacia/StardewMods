@@ -1,4 +1,4 @@
-﻿using StardewModdingAPI;
+using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using System;
 using ContentPatcher;
@@ -12,7 +12,7 @@ namespace CarWarp
 		public static ModConfig Config { get; set; }
 		public static IModHelper Helper { get; set; }
 		public static ICommandHelper CCHelper => Helper.ConsoleCommands;
-		public static IContentHelper ContentHelper => Helper.Content;
+		public static IGameContentHelper GameContent => Helper.GameContent;
 		public static IModContentHelper ModContent => Helper.ModContent;
 		public static IContentPackHelper ContentPackHelper => Helper.ContentPacks;
 		public static IDataHelper DataHelper => Helper.Data;
@@ -68,11 +68,6 @@ namespace CarWarp
 			Manifest = modEntry.ModManifest;
 			Helper = modEntry.Helper;
 			Log.Monitor = modEntry.Monitor;
-		}
-
-		internal static void InitializeAssetHandlers()
-		{
-			Helper.Content.AssetLoaders.Add(new AssetLoader());
 		}
 	}
 }

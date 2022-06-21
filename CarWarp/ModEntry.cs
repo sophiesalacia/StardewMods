@@ -1,4 +1,4 @@
-﻿using StardewModdingAPI;
+using StardewModdingAPI;
 
 namespace CarWarp
 {
@@ -7,7 +7,6 @@ namespace CarWarp
 		public override void Entry(IModHelper helper)
 		{
 			Globals.InitializeGlobals(this);
-			Globals.InitializeAssetHandlers();
 			Globals.InitializeConfig();
 			ConsoleCommandManager.InitializeConsoleCommands();
 			EventHookManager.InitializeEventHooks();

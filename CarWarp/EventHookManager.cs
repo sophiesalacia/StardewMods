@@ -1,4 +1,6 @@
-﻿using StardewModdingAPI.Events;
+using System;
+using System.Collections.Generic;
+using StardewModdingAPI.Events;
 using static SolidFoundations.Framework.Interfaces.Internal.IApi;
 
 namespace CarWarp
@@ -10,13 +12,27 @@ namespace CarWarp
 		/// </summary>
 		internal static void InitializeEventHooks()
 		{
-			Globals.EventHelper.GameLoop.GameLaunched += HookIntoApis;
+            Globals.EventHelper.Content.AssetRequested += LoadAssets;
+            Globals.EventHelper.GameLoop.GameLaunched += HookIntoApis;
 		}
 
-		/// <summary>
-		/// Tries to get the SF API, and if successful, register a Broadcast event handler.
-		/// </summary>
-		private static void HookIntoApis(object sender, GameLaunchedEventArgs e)
+        private static void LoadAssets(object sender, AssetRequestedEventArgs e)
+        {
+            if (e.Name.IsEquivalentTo(Globals.WarpLocationsContentPath))
+            {
+                e.LoadFrom(
+                    () => {
+                        return new Dictionary<string, WarpLocationModel>();
+                    },
+                    AssetLoadPriority.Medium
+                );
+            }
+        }
+
+        /// <summary>
+        /// Tries to get the SF API, and if successful, register a Broadcast event handler.
+        /// </summary>
+        private static void HookIntoApis(object sender, GameLaunchedEventArgs e)
 		{
 			if (!Globals.InitializeSFApi())
 			{

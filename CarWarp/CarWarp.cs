@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
@@ -46,8 +46,8 @@ namespace CarWarp
 		public void Activate()
 		{
 			// invalidate and reload warp locations asset so that it is up-to-date
-			Globals.ContentHelper.InvalidateCache(Globals.WarpLocationsContentPath);
-			WarpLocations = Globals.ContentHelper.Load<Dictionary<string, WarpLocationModel>>(Globals.WarpLocationsContentPath, StardewModdingAPI.ContentSource.GameContent);
+			Globals.GameContent.InvalidateCache(Globals.WarpLocationsContentPath);
+			WarpLocations = Globals.GameContent.Load<Dictionary<string, WarpLocationModel>>(Globals.WarpLocationsContentPath);
 
 			// build list of destination responses
 			List<Response> responses = new List<Response>();
