@@ -1,0 +1,78 @@
+﻿using StardewModdingAPI.Events;
+using static SolidFoundations.Framework.Interfaces.Internal.IApi;
+
+namespace CarWarp
+{
+	internal class EventHookManager
+	{
+		/// <summary>
+		/// Sets up initial event handler.
+		/// </summary>
+		internal static void InitializeEventHooks()
+		{
+			Globals.EventHelper.GameLoop.GameLaunched += HookIntoApis;
+		}
+
+		/// <summary>
+		/// Tries to get the SF API, and if successful, register a Broadcast event handler.
+		/// </summary>
+		private static void HookIntoApis(object sender, GameLaunchedEventArgs e)
+		{
+			if (!Globals.InitializeSFApi())
+			{
+				Log.Error("Failed to fetch SolidFoundations API.");
+				return;
+			}
+
+			if (!Globals.InitializeCPApi())
+			{
+				Log.Error("Failed to fetch ContentPatcher API.");
+				return;
+			}
+
+			if (Globals.InitializeGMCMApi())
+			{
+				GenericModConfigMenuHelper.BuildConfigMenu();
+			}
+			else
+			{
+				Log.Info("Failed to fetch GMCM API, skipping config menu setup.");
+			}
+
+			Globals.ContentPatcherApi.RegisterToken(Globals.Manifest, "Configuration", () =>
+					{
+						return new[] {
+							Globals.Config.Configuration.ToLower() switch
+								{
+									"right" =>  "sophie\\CarWarp\\overlay-steering-wheel-right",
+									"left" =>   "sophie\\CarWarp\\overlay-steering-wheel-left",
+									"none" =>   "sophie\\CarWarp\\overlay-no-steering-wheel",
+									"empty" =>  "sophie\\CarWarp\\overlay-no-dashboard",
+									_ =>        "sophie\\CarWarp\\overlay-steering-wheel-right"
+								}
+						};
+					}
+				);
+
+			Globals.ContentPatcherApi.RegisterToken(Globals.Manifest, "SeasonalOverlay", () =>
+					{
+						return new[] { Globals.Config.SeasonalOverlay.ToString() };
+					}
+				);
+
+			Globals.SolidFoundationsApi.BroadcastSpecialActionTriggered += OnBroadcastTriggered;
+		}
+
+		/// <summary>
+		/// Intercepts the Broadcast message from skell's Car, triggering the warp dialogue.
+		/// </summary>
+		private static void OnBroadcastTriggered(object sender, BroadcastEventArgs e)
+		{
+			if (e.BuildingId is "skellady.SF.cars_Car")
+			{
+				// pass car to CarWarp and initiate activation
+				new CarWarp(e.Building).Activate();
+			}
+		}
+	}
+}
