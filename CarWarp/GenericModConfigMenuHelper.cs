@@ -1,5 +1,3 @@
-﻿using System;
-
 namespace CarWarp
 {
 	internal class GenericModConfigMenuHelper
@@ -33,7 +31,7 @@ namespace CarWarp
 				name: () => "Configuration",
 				getValue: () => Globals.Config.Configuration,
 				setValue: value => Globals.Config.Configuration = value,
-				allowedValues: new string[] {"Right", "Left", "None", "Empty"}
+				allowedValues: new[] {"Right", "Left", "None", "Empty"}
 			);
 
 			Globals.GMCMApi.AddSectionTitle(

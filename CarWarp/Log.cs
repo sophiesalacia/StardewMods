@@ -1,4 +1,4 @@
-﻿using StardewModdingAPI;
+using StardewModdingAPI;
 
 namespace CarWarp
 {
@@ -9,7 +9,7 @@ namespace CarWarp
 
 		public static void Verbose(string str) => Monitor.VerboseLog(str);
 
-		public static void Trace(string str) => Monitor.Log(str, LogLevel.Trace);
+		public static void Trace(string str) => Monitor.Log(str);
 
 		public static void Debug(string str) => Monitor.Log(str, LogLevel.Debug);
 

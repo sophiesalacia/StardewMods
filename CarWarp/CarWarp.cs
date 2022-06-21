@@ -12,8 +12,8 @@ namespace CarWarp
         private readonly Building Car;
         private readonly Vector2 CarDriversSeat;
 
-        private static readonly float LeftSideOffset = 1f;
-        private static readonly float RightSideOffset = 2f;
+        private const float LeftSideOffset = 1f;
+        private const float RightSideOffset = 2f;
 
         public CarWarp(Building car)
         {
@@ -43,7 +43,7 @@ namespace CarWarp
             WarpLocations = Globals.GameContent.Load<Dictionary<string, WarpLocationModel>>(Globals.WarpLocationsContentPath);
 
             // build list of destination responses
-            List<Response> responses = new List<Response>();
+            List<Response> responses = new();
             foreach ((string key, WarpLocationModel warpLoc) in WarpLocations)
             {
                 // validate destination before adding response
