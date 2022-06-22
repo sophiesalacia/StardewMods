@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarWarp", "CarWarp\CarWarp.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lasting Conversation Topics", "Lasting Conversation Topics\Lasting Conversation Topics.csproj", "{D91B989F-CBF2-4008-999B-CD2C8A8F6D33}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Splash Text", "SplashText\Splash Text.csproj", "{37549A44-6AE7-41D6-8757-F7E6EA646D5D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{D91B989F-CBF2-4008-999B-CD2C8A8F6D33}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D91B989F-CBF2-4008-999B-CD2C8A8F6D33}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D91B989F-CBF2-4008-999B-CD2C8A8F6D33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37549A44-6AE7-41D6-8757-F7E6EA646D5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37549A44-6AE7-41D6-8757-F7E6EA646D5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37549A44-6AE7-41D6-8757-F7E6EA646D5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37549A44-6AE7-41D6-8757-F7E6EA646D5D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
