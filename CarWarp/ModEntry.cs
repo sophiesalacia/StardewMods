@@ -1,15 +1,14 @@
 using StardewModdingAPI;
 
-namespace CarWarp
+namespace CarWarp;
+
+public class ModEntry : Mod
 {
-	public class ModEntry : Mod
-	{
-		public override void Entry(IModHelper helper)
-		{
-			Globals.InitializeGlobals(this);
-			Globals.InitializeConfig();
-			ConsoleCommandManager.InitializeConsoleCommands();
-			EventHookManager.InitializeEventHooks();
-		}
-	}
+    public override void Entry(IModHelper helper)
+    {
+        Globals.InitializeGlobals(this);
+        Globals.InitializeConfig();
+        ConsoleCommandManager.InitializeConsoleCommands();
+        EventHookManager.InitializeEventHooks();
+    }
 }

@@ -1,15 +1,14 @@
 using StardewModdingAPI;
 
-namespace SplashText
+namespace SplashText;
+
+public class ModEntry : Mod
 {
-    public class ModEntry : Mod
+    public override void Entry(IModHelper helper)
     {
-        public override void Entry(IModHelper helper)
-        {
-            Globals.InitializeGlobals(this);
-            EventHookManager.InitializeEventHooks();
-            ConsoleCommandManager.InitializeConsoleCommands();
-            SplashText.Initialize();
-        }
+        Globals.InitializeGlobals(this);
+        EventHookManager.InitializeEventHooks();
+        ConsoleCommandManager.InitializeConsoleCommands();
+        SplashText.Initialize();
     }
 }

@@ -4,52 +4,51 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Network;
 
-namespace LastingCTs
+namespace LastingCTs;
+
+internal class EventHookManager
 {
-    internal class EventHookManager
+    internal static void InitializeEventHooks()
     {
-        internal static void InitializeEventHooks()
+        Globals.EventHelper.Content.AssetRequested += LoadAssets;
+        Globals.EventHelper.GameLoop.DayStarted += ProcessConversationTopics;
+    }
+
+    [EventPriority(EventPriority.Low)]
+    private static void ProcessConversationTopics(object sender, DayStartedEventArgs e)
+    {
+        // grab the player's active CTs
+        NetStringDictionary<int, NetInt> activeCTs = Game1.player.activeDialogueEvents;
+
+        // flush and reload the asset which tells us which CTs to preserve
+        Globals.GameContent.InvalidateCache(Globals.ContentPath);
+        var lastingCTs = Globals.GameContent
+            .Load<Dictionary<string, string>>(Globals.ContentPath).Keys;
+
+        foreach (string ct in lastingCTs)
         {
-            Globals.EventHelper.Content.AssetRequested += LoadAssets;
-            Globals.EventHelper.GameLoop.DayStarted += ProcessConversationTopics;
-        }
-
-        [EventPriority(EventPriority.Low)]
-        private static void ProcessConversationTopics(object sender, DayStartedEventArgs e)
-        {
-            // grab the player's active CTs
-            NetStringDictionary<int, NetInt> activeCTs = Game1.player.activeDialogueEvents;
-
-            // flush and reload the asset which tells us which CTs to preserve
-            Globals.GameContent.InvalidateCache(Globals.ContentPath);
-            var lastingCTs = Globals.GameContent
-                .Load<Dictionary<string, string>>(Globals.ContentPath).Keys;
-
-            foreach (string ct in lastingCTs)
+            if (!activeCTs.ContainsKey(ct))
             {
-                if (!activeCTs.ContainsKey(ct))
-                {
-                    activeCTs.Add(ct, 1);
-                }
-                else if (activeCTs[ct] < 1)
-                {
-                    activeCTs[ct] = 1;
-                }
+                activeCTs.Add(ct, 1);
+            }
+            else if (activeCTs[ct] < 1)
+            {
+                activeCTs[ct] = 1;
             }
         }
+    }
 
-        private static void LoadAssets(object sender, AssetRequestedEventArgs e)
+    private static void LoadAssets(object sender, AssetRequestedEventArgs e)
+    {
+        if (e.Name.IsEquivalentTo(Globals.ContentPath))
         {
-            if (e.Name.IsEquivalentTo(Globals.ContentPath))
-            {
-                e.LoadFrom(
-                    () => new Dictionary<string, string>
-                    {
-                        ["Introduction"] = "true"
-                    },
-                    AssetLoadPriority.Medium
-                );
-            }
+            e.LoadFrom(
+                () => new Dictionary<string, string>
+                {
+                    ["Introduction"] = "true"
+                },
+                AssetLoadPriority.Medium
+            );
         }
     }
 }

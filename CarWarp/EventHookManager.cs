@@ -2,90 +2,89 @@ using System.Collections.Generic;
 using StardewModdingAPI.Events;
 using static SolidFoundations.Framework.Interfaces.Internal.IApi;
 
-namespace CarWarp
+namespace CarWarp;
+
+internal class EventHookManager
 {
-    internal class EventHookManager
+    /// <summary>
+    /// Sets up initial event handler.
+    /// </summary>
+    internal static void InitializeEventHooks()
     {
-        /// <summary>
-        /// Sets up initial event handler.
-        /// </summary>
-        internal static void InitializeEventHooks()
+        Globals.EventHelper.Content.AssetRequested += LoadAssets;
+        Globals.EventHelper.GameLoop.GameLaunched += HookIntoApis;
+    }
+
+    private static void LoadAssets(object sender, AssetRequestedEventArgs e)
+    {
+        if (e.Name.IsEquivalentTo(Globals.WarpLocationsContentPath))
         {
-            Globals.EventHelper.Content.AssetRequested += LoadAssets;
-            Globals.EventHelper.GameLoop.GameLaunched += HookIntoApis;
+            e.LoadFrom(
+                () => new Dictionary<string, WarpLocationModel>(),
+                AssetLoadPriority.Medium
+            );
+        }
+    }
+
+    /// <summary>
+    /// Tries to get the SF API, and if successful, register a Broadcast event handler.
+    /// </summary>
+    private static void HookIntoApis(object sender, GameLaunchedEventArgs e)
+    {
+        if (!Globals.InitializeSFApi())
+        {
+            Log.Error("Failed to fetch SolidFoundations API.");
+            return;
         }
 
-        private static void LoadAssets(object sender, AssetRequestedEventArgs e)
+        if (!Globals.InitializeCPApi())
         {
-            if (e.Name.IsEquivalentTo(Globals.WarpLocationsContentPath))
-            {
-                e.LoadFrom(
-                    () => new Dictionary<string, WarpLocationModel>(),
-                    AssetLoadPriority.Medium
-                );
-            }
+            Log.Error("Failed to fetch ContentPatcher API.");
+            return;
         }
 
-        /// <summary>
-        /// Tries to get the SF API, and if successful, register a Broadcast event handler.
-        /// </summary>
-        private static void HookIntoApis(object sender, GameLaunchedEventArgs e)
+        if (Globals.InitializeGMCMApi())
         {
-            if (!Globals.InitializeSFApi())
-            {
-                Log.Error("Failed to fetch SolidFoundations API.");
-                return;
-            }
+            GenericModConfigMenuHelper.BuildConfigMenu();
+        }
+        else
+        {
+            Log.Info("Failed to fetch GMCM API, skipping config menu setup.");
+        }
 
-            if (!Globals.InitializeCPApi())
+        Globals.ContentPatcherApi.RegisterToken(Globals.Manifest, "Configuration", () =>
             {
-                Log.Error("Failed to fetch ContentPatcher API.");
-                return;
-            }
-
-            if (Globals.InitializeGMCMApi())
-            {
-                GenericModConfigMenuHelper.BuildConfigMenu();
-            }
-            else
-            {
-                Log.Info("Failed to fetch GMCM API, skipping config menu setup.");
-            }
-
-            Globals.ContentPatcherApi.RegisterToken(Globals.Manifest, "Configuration", () =>
+                return new[] {
+                    Globals.Config.Configuration.ToLower() switch
                     {
-                        return new[] {
-                            Globals.Config.Configuration.ToLower() switch
-                                {
-                                    "right" =>  "sophie\\CarWarp\\overlay-steering-wheel-right",
-                                    "left" =>   "sophie\\CarWarp\\overlay-steering-wheel-left",
-                                    "none" =>   "sophie\\CarWarp\\overlay-no-steering-wheel",
-                                    "empty" =>  "sophie\\CarWarp\\overlay-no-dashboard",
-                                    _ =>        "sophie\\CarWarp\\overlay-steering-wheel-right"
-                                }
-                        };
+                        "right" =>  "sophie\\CarWarp\\overlay-steering-wheel-right",
+                        "left" =>   "sophie\\CarWarp\\overlay-steering-wheel-left",
+                        "none" =>   "sophie\\CarWarp\\overlay-no-steering-wheel",
+                        "empty" =>  "sophie\\CarWarp\\overlay-no-dashboard",
+                        _ =>        "sophie\\CarWarp\\overlay-steering-wheel-right"
                     }
-                );
-
-            Globals.ContentPatcherApi.RegisterToken(Globals.Manifest, "SeasonalOverlay", () =>
-                    {
-                        return new[] { Globals.Config.SeasonalOverlay.ToString() };
-                    }
-                );
-
-            Globals.SolidFoundationsApi.BroadcastSpecialActionTriggered += OnBroadcastTriggered;
-        }
-
-        /// <summary>
-        /// Intercepts the Broadcast message from skell's Car, triggering the warp dialogue.
-        /// </summary>
-        private static void OnBroadcastTriggered(object sender, BroadcastEventArgs e)
-        {
-            if (e.BuildingId is "skellady.SF.cars_Car")
-            {
-                // pass car to CarWarp and initiate activation
-                new CarWarp(e.Building).Activate();
+                };
             }
+        );
+
+        Globals.ContentPatcherApi.RegisterToken(Globals.Manifest, "SeasonalOverlay", () =>
+            {
+                return new[] { Globals.Config.SeasonalOverlay.ToString() };
+            }
+        );
+
+        Globals.SolidFoundationsApi.BroadcastSpecialActionTriggered += OnBroadcastTriggered;
+    }
+
+    /// <summary>
+    /// Intercepts the Broadcast message from skell's Car, triggering the warp dialogue.
+    /// </summary>
+    private static void OnBroadcastTriggered(object sender, BroadcastEventArgs e)
+    {
+        if (e.BuildingId is "skellady.SF.cars_Car")
+        {
+            // pass car to CarWarp and initiate activation
+            new CarWarp(e.Building).Activate();
         }
     }
 }
