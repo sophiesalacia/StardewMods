@@ -21,9 +21,16 @@ internal class SplashText
     private static readonly float sinePeriod = 2f;
 
     private static string splashText;
-    private static Vector2 splashMeasurements;
     private static int splashWidth;
     private static int splashHeight;
+
+    private static Vector2 drawPosition;
+    private static Vector2 drawPositionOffset1;
+    private static Vector2 drawPositionOffset2;
+    private static Vector2 splashMeasurements;
+    private static Vector2 splashCenter;
+
+    private static readonly Color shadowColor = new(60, 30, 0, 180);
 
     private static float windowSizeFactor = 1;
 
@@ -62,15 +69,18 @@ internal class SplashText
         splashMeasurements = splashFont.MeasureString(splashText);
         splashWidth = (int) (splashMeasurements.X * windowSizeFactor);
         splashHeight = (int) (splashMeasurements.Y * windowSizeFactor);
+        splashCenter = new Vector2(splashWidth / (float) 2, splashHeight / (float) 2);
+
+        drawPosition = new Vector2(xPosition, yPosition);
+        drawPositionOffset1 = new Vector2(xPosition + 4, yPosition + 2);
+        drawPositionOffset2 = new Vector2(xPosition + 2, yPosition + 1);
     }
 
     internal static void RenderSplashText(object sender, RenderedActiveMenuEventArgs e)
     {
         // back out if we're on any submenu (New, Load, etc)
         if (TitleMenu.subMenu is not null)
-        {
             return;
-        }
 
         // update delta time value
         delta = (delta + ((float) Game1.currentGameTime.ElapsedGameTime.TotalMilliseconds * 0.002f)) % 50000f;
@@ -84,10 +94,10 @@ internal class SplashText
         e.SpriteBatch.DrawString(
             splashFont,
             splashText,
-            new Vector2(xPosition + 4, yPosition + 2),
-            new Color(60, 30, 0, 180),
+            drawPositionOffset1,
+            shadowColor,
             splashRotation,
-            new Vector2(splashWidth / 2, splashHeight / 2),
+            splashCenter,
             splashScale * windowSizeFactor,
             SpriteEffects.None,
             1f
@@ -96,10 +106,10 @@ internal class SplashText
         e.SpriteBatch.DrawString(
             splashFont,
             splashText,
-            new Vector2(xPosition + 2, yPosition + 1),
-            new Color(60, 30, 0, 180),
+            drawPositionOffset2,
+            shadowColor,
             splashRotation,
-            new Vector2(splashWidth / 2, splashHeight / 2),
+            splashCenter,
             splashScale * windowSizeFactor,
             SpriteEffects.None,
             1f
@@ -109,10 +119,10 @@ internal class SplashText
         e.SpriteBatch.DrawString(
             splashFont,
             splashText,
-            new Vector2(xPosition, yPosition),
+            drawPosition,
             Color.Yellow,
             splashRotation,
-            new Vector2(splashWidth / 2, splashHeight / 2),
+            splashCenter,
             splashScale * windowSizeFactor,
             SpriteEffects.None,
             1f
