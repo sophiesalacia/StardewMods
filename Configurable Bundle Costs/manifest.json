@@ -1,7 +1,7 @@
 ﻿{
   "Name": "Configurable Bundle Costs",
   "Author": "sophie",
-  "Version": "0.4.0",
+  "Version": "1.0.0",
   "Description": "Allows the user to configure the cost of purchasing vault/Joja bundles.",
   "UniqueID": "sophie.ConfigurableBundleCosts",
   "EntryDll": "Configurable Bundle Costs.dll",
