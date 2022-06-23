@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<AssemblyName>CarWarp</AssemblyName>
-		<RootNamespace>CarWarp</RootNamespace>
+		<AssemblyName>Car Warp</AssemblyName>
+		<RootNamespace>Car Warp</RootNamespace>
 		<GamePath>D:\Games\SteamLibrary\steamapps\common\Stardew Valley</GamePath>
 		<Version>0.1.0</Version>
 		<TargetFramework>net5.0</TargetFramework>
