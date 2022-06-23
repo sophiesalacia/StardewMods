@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sturdy Saplings", "Sturdy S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configurable Bundle Costs", "Configurable Bundle Costs\Configurable Bundle Costs.csproj", "{59738027-FC95-4C45-A23F-DE9617B33B7A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarWarp", "Car Warp\CarWarp.csproj", "{BCA65855-93AE-405F-B388-30131084BBEF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Car Warp", "Car Warp\Car Warp.csproj", "{BCA65855-93AE-405F-B388-30131084BBEF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Splash Text", "Splash Text\Splash Text.csproj", "{3E8840B3-09D1-4686-8FBB-DCE956B87394}"
 EndProject
