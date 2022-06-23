@@ -27,7 +27,7 @@ internal class EventHookManager
     }
 
     /// <summary>
-    /// Tries to get the SF API, and if successful, register a Broadcast event handler.
+    /// Tries to get and utilize all APIs.
     /// </summary>
     private static void HookIntoApis(object sender, GameLaunchedEventArgs e)
     {
