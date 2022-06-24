@@ -1,0 +1,11 @@
+﻿{
+    "Name": "Test Environment",
+    "Author": "sophie",
+    "Version": "0.1.0",
+    "Description": "Mod for me to test random stuff. There's probably nothing for you here.",
+    "UniqueID": "sophie.TestEnvironment",
+    "EntryDll": "TestEnvironment.dll",
+    "MinimumApiVersion": "3.13.0",
+    "UpdateKeys": [],
+    "Dependencies": []
+}
