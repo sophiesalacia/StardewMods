@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <AssemblyName>Configurable Bundle Costs</AssemblyName>
-    <RootNamespace>Configurable Bundle Costs</RootNamespace>
+    <AssemblyName>ConfigurableBundleCosts</AssemblyName>
+    <RootNamespace>ConfigurableBundleCosts</RootNamespace>
     <GamePath>D:\Games\SteamLibrary\steamapps\common\Stardew Valley</GamePath>
     <Version>0.1.0</Version>
     <TargetFramework>net5.0</TargetFramework>

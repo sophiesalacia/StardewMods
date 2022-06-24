@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<AssemblyName>Sturdy Saplings</AssemblyName>
-		<RootNamespace>Sturdy Saplings</RootNamespace>
+		<AssemblyName>SturdySaplings</AssemblyName>
+		<RootNamespace>SturdySaplings</RootNamespace>
     <GamePath>D:\Games\SteamLibrary\steamapps\common\Stardew Valley</GamePath>
 		<Version>0.1.0</Version>
 		<TargetFramework>net5.0</TargetFramework>

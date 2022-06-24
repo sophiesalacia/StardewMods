@@ -149,6 +149,7 @@ internal class GenericModConfigMenuHelper
 
     private static void UpdateBundleDataIfNecessary(string fieldId, object newValue)
     {
+        Log.Trace("updating bundle data");
         BundleManager.CheckBundleData();
     }
 }

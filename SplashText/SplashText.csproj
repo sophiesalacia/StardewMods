@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-	  <AssemblyName>Splash Text</AssemblyName>
-	  <RootNamespace>Splash Text</RootNamespace>
+	  <AssemblyName>SplashText</AssemblyName>
+	  <RootNamespace>SplashText</RootNamespace>
 	  <Version>0.1.0</Version>
 	  <TargetFramework>net5.0</TargetFramework>
 	  <EnableHarmony>true</EnableHarmony>

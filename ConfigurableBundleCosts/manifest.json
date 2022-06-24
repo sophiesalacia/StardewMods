@@ -4,7 +4,7 @@
   "Version": "1.0.0",
   "Description": "Allows the user to configure the cost of purchasing vault/Joja bundles.",
   "UniqueID": "sophie.ConfigurableBundleCosts",
-  "EntryDll": "Configurable Bundle Costs.dll",
+  "EntryDll": "ConfigurableBundleCosts.dll",
   "MinimumApiVersion": "3.13.0",
   "UpdateKeys": [
     "Nexus:9444"

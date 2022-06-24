@@ -4,7 +4,7 @@
   "Version": "1.2.0",
   "Description": "Extends skellady's decorative Car mod with warp functionality.",
   "UniqueID": "sophie.CarWarp",
-  "EntryDll": "Car Warp.dll",
+  "EntryDll": "CarWarp.dll",
   "MinimumApiVersion": "3.13.0",
   "UpdateKeys": ["Nexus:???"],
   "Dependencies": [
