@@ -1,10 +1,10 @@
 ﻿{
-    "Name": "Lasting Conversation Topics",
+    "Name": "ProjectTemplate",
     "Author": "sophie",
     "Version": "0.1.0",
-    "Description": "Extends given conversation topics indefinitely.",
-    "UniqueID": "sophie.LastingCTs",
-    "EntryDll": "LastingConversationTopics.dll",
+    "Description": "Template project with basic boilerplate for settings up mods.",
+    "UniqueID": "sophie.ProjectTemplate",
+    "EntryDll": "ProjectTemplate.dll",
     "MinimumApiVersion": "3.13.0",
     "UpdateKeys": []
 }
