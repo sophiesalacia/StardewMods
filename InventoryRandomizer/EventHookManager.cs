@@ -32,8 +32,9 @@ internal class EventHookManager
         Log.Info("Reloading object data for all supported assets.");
         AssetManager.ReloadObjectData();
 
-        // reset timer just to be safe
+        // reset timer, chatbox just to be safe
         TimeManager.ResetTimer();
+        TimeManager.RegrabChatbox();
     }
 
     private static void ReloadObjectData(object sender, AssetReadyEventArgs e)

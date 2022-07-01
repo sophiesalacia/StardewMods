@@ -11,7 +11,7 @@ internal class TimeManager
 {
     private static int SecondsUntilRandomization = Globals.Config.SecondsUntilInventoryRandomization;
 
-    private static readonly List<ChatMessage> ChatMessages =
+    private static List<ChatMessage> ChatMessages =
         Globals.ReflectionHelper.GetField<List<ChatMessage>>(Game1.chatBox, "messages").GetValue();
 
     internal static void OnOneSecondUpdateTicked(object sender, OneSecondUpdateTickedEventArgs e)
@@ -62,5 +62,10 @@ internal class TimeManager
     internal static void ResetTimer()
     {
         SecondsUntilRandomization = Globals.Config.SecondsUntilInventoryRandomization;
+    }
+
+    internal static void RegrabChatbox()
+    {
+        ChatMessages = Globals.ReflectionHelper.GetField<List<ChatMessage>>(Game1.chatBox, "messages").GetValue();
     }
 }
