@@ -1,0 +1,10 @@
+﻿{
+    "Name": "Inventory Randomizer",
+    "Author": "sophie",
+    "Version": "0.1.0",
+    "Description": "Randomizes the player's inventory on a configurable interval.",
+    "UniqueID": "sophie.InventoryRandomizer",
+    "EntryDll": "InventoryRandomizer.dll",
+    "MinimumApiVersion": "3.13.0",
+    "UpdateKeys": []
+}
