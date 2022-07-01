@@ -1,5 +1,5 @@
 ﻿
-#### Project Template
+#### Inventory Randomizer
 *by sophie*
 
-Does not do anything. Boilerplate project to make it easy for me to get projects up and running quickly.
+Randomizes the player's inventory on a configurable interval. Uses a configurable weighted probability to determine which category to draw from, and respects the quantity of items in a given stack.
