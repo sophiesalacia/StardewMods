@@ -31,6 +31,9 @@ internal class EventHookManager
     {
         Log.Info("Reloading object data for all supported assets.");
         AssetManager.ReloadObjectData();
+
+        // reset timer just to be safe
+        TimeManager.ResetTimer();
     }
 
     private static void ReloadObjectData(object sender, AssetReadyEventArgs e)

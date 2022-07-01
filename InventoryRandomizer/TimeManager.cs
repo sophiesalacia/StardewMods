@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -50,11 +51,16 @@ internal class TimeManager
                 ChatMessages[^1].timeLeftToDisplay = 150;
 
                 InventoryRandomizer.RandomizeInventory();
-                SecondsUntilRandomization = Globals.Config.SecondsUntilInventoryRandomization;
+                ResetTimer();
                 break;
 
             default:
                 return;
         }
+    }
+
+    internal static void ResetTimer()
+    {
+        SecondsUntilRandomization = Globals.Config.SecondsUntilInventoryRandomization;
     }
 }
