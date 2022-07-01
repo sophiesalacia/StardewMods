@@ -33,7 +33,8 @@ internal class TimeManager
             // send chat messages on final 5 seconds
             case > 0 and < 6:
                 // clear my chat messages as they show up, to avoid clogging the chat
-                ChatMessages.RemoveAll(chatMessage => chatMessage.message[0].message.Contains("Randomizing inventory"));
+                ChatMessages.RemoveAll(chatMessage =>
+                    chatMessage.message[0].message.Contains("Randomizing inventory"));
                 Game1.chatBox.addInfoMessage($"Randomizing inventory in {SecondsUntilRandomization} seconds...");
                 ChatMessages[^1].timeLeftToDisplay = 120;
                 return;
@@ -43,7 +44,8 @@ internal class TimeManager
                 // if sound config is turned on, play sound
                 Game1.playSound("cowboy_powerup");
 
-                ChatMessages.RemoveAll(chatMessage => chatMessage.message[0].message.Contains("Randomizing inventory"));
+                ChatMessages.RemoveAll(chatMessage =>
+                    chatMessage.message[0].message.Contains("Randomizing inventory"));
                 Game1.chatBox.addInfoMessage("Inventory randomized!");
                 ChatMessages[^1].timeLeftToDisplay = 150;
 

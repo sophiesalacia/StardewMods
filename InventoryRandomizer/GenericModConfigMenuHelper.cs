@@ -1,29 +1,25 @@
-using System;
-using System.Configuration;
-
 namespace InventoryRandomizer;
 
 internal class GenericModConfigMenuHelper
 {
-
     internal static void BuildConfigMenu()
     {
         // register mod
         Globals.GmcmApi.Register(
-            mod: Globals.Manifest,
-            reset: () => Globals.Config = new ModConfig(),
-            save: () => Globals.Helper.WriteConfig(Globals.Config)
+            Globals.Manifest,
+            () => Globals.Config = new ModConfig(),
+            () => Globals.Helper.WriteConfig(Globals.Config)
         );
 
         /* General */
 
         Globals.GmcmApi.AddSectionTitle(
-            mod: Globals.Manifest,
-            text: () => "General"
+            Globals.Manifest,
+            () => "General"
         );
 
         Globals.GmcmApi.AddBoolOption(
-            mod: Globals.Manifest,
+            Globals.Manifest,
             name: () => "Chat Message Alerts",
             tooltip: () => "Receive periodic alerts on the time until inventory randomization occurs.",
             getValue: () => Globals.Config.ChatMessageAlerts,
@@ -31,7 +27,7 @@ internal class GenericModConfigMenuHelper
         );
 
         Globals.GmcmApi.AddBoolOption(
-            mod: Globals.Manifest,
+            Globals.Manifest,
             name: () => "Play Sound on Inventory Randomization",
             tooltip: () => "Play a sound when the inventory is randomized.",
             getValue: () => Globals.Config.PlaySoundOnRandomization,
@@ -39,7 +35,7 @@ internal class GenericModConfigMenuHelper
         );
 
         Globals.GmcmApi.AddNumberOption(
-            mod: Globals.Manifest,
+            Globals.Manifest,
             name: () => "Seconds Until Inventory Randomizations",
             tooltip: () => "Time in seconds until the inventory is randomized again.",
             getValue: () => Globals.Config.SecondsUntilInventoryRandomization,
@@ -47,14 +43,15 @@ internal class GenericModConfigMenuHelper
         );
 
         Globals.GmcmApi.AddSectionTitle(
-            mod: Globals.Manifest,
-            text: () => "Probability Weights"
+            Globals.Manifest,
+            () => "Probability Weights"
         );
 
         Globals.GmcmApi.AddNumberOption(
-            mod: Globals.Manifest,
+            Globals.Manifest,
             name: () => "Recipe Chance",
-            tooltip: () => "Chance for a recipe to show up instead of an item, if that item has a valid recipe.\nNOTE: Learning a recipe removes it from the pool.",
+            tooltip: () =>
+                "Chance for a recipe to show up instead of an item, if that item has a valid recipe.\nNOTE: Learning a recipe removes it from the pool.",
             getValue: () => Globals.Config.RecipeChance,
             setValue: val => Globals.Config.RecipeChance = val,
             min: 0f,
@@ -63,11 +60,12 @@ internal class GenericModConfigMenuHelper
         );
 
         Globals.GmcmApi.AddParagraph(
-            mod: Globals.Manifest,
-            text: () => "This section controls the weights of each category, or how likely they are to be chosen. Higher values are more likely to be chosen.");
+            Globals.Manifest,
+            () =>
+                "This section controls the weights of each category, or how likely they are to be chosen. Higher values are more likely to be chosen.");
 
         Globals.GmcmApi.AddNumberOption(
-            mod: Globals.Manifest,
+            Globals.Manifest,
             name: () => "Craftables Weight",
             tooltip: () => "How likely BigCraftables (i.e. Furnaces, Heaters, Scarecrows, etc.) are to be chosen.",
             getValue: () => Globals.Config.BigCraftablesWeight,
@@ -76,7 +74,7 @@ internal class GenericModConfigMenuHelper
         );
 
         Globals.GmcmApi.AddNumberOption(
-            mod: Globals.Manifest,
+            Globals.Manifest,
             name: () => "Boots Weight",
             tooltip: () => "How likely Boots are to be chosen.",
             getValue: () => Globals.Config.BootsWeight,
@@ -85,7 +83,7 @@ internal class GenericModConfigMenuHelper
         );
 
         Globals.GmcmApi.AddNumberOption(
-            mod: Globals.Manifest,
+            Globals.Manifest,
             name: () => "Clothing Weight",
             tooltip: () => "How likely Clothing is to be chosen.",
             getValue: () => Globals.Config.ClothingWeight,
@@ -94,7 +92,7 @@ internal class GenericModConfigMenuHelper
         );
 
         Globals.GmcmApi.AddNumberOption(
-            mod: Globals.Manifest,
+            Globals.Manifest,
             name: () => "Furniture Weight",
             tooltip: () => "How likely Furniture is to be chosen.",
             getValue: () => Globals.Config.FurnitureWeight,
@@ -103,7 +101,7 @@ internal class GenericModConfigMenuHelper
         );
 
         Globals.GmcmApi.AddNumberOption(
-            mod: Globals.Manifest,
+            Globals.Manifest,
             name: () => "Hats Weight",
             tooltip: () => "How likely Hats are to be chosen.",
             getValue: () => Globals.Config.HatsWeight,
@@ -112,7 +110,7 @@ internal class GenericModConfigMenuHelper
         );
 
         Globals.GmcmApi.AddNumberOption(
-            mod: Globals.Manifest,
+            Globals.Manifest,
             name: () => "Objects Weight",
             tooltip: () => "How likely Objects (food, fish, crops, quest items, etc.) are to be chosen.",
             getValue: () => Globals.Config.ObjectsWeight,
@@ -121,7 +119,7 @@ internal class GenericModConfigMenuHelper
         );
 
         Globals.GmcmApi.AddNumberOption(
-            mod: Globals.Manifest,
+            Globals.Manifest,
             name: () => "Weapons Weight",
             tooltip: () => "How likely Weapons are to be chosen.",
             getValue: () => Globals.Config.WeaponsWeight,
@@ -130,7 +128,7 @@ internal class GenericModConfigMenuHelper
         );
 
         Globals.GmcmApi.AddNumberOption(
-            mod: Globals.Manifest,
+            Globals.Manifest,
             name: () => "Tools Weight",
             tooltip: () => "How likely Tools are to be chosen.",
             getValue: () => Globals.Config.ToolsWeight,

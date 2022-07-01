@@ -1,8 +1,6 @@
-using System;
-
 namespace InventoryRandomizer;
 
-class ModConfig
+internal class ModConfig
 {
     // General Options
     public int SecondsUntilInventoryRandomization = 300;
@@ -26,5 +24,4 @@ class ModConfig
         return BigCraftablesWeight + BootsWeight + ClothingWeight + FurnitureWeight + HatsWeight + ObjectsWeight +
                WeaponsWeight + ToolsWeight;
     }
-
 }

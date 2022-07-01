@@ -26,9 +26,7 @@ internal static class InventoryRandomizer
             Item item = inventory[i];
 
             if (item is null)
-            {
                 continue;
-            }
 
             // if item is stackable and currently is stacked, respect quantity
             if (item.Stack > 1)
@@ -119,9 +117,10 @@ internal static class InventoryRandomizer
         string name = fields[0];
 
         // if recipe exists and player doesn't already know it, configurable chance they'll receive the recipe instead
-        bool isRecipe = AssetManager.CachedRecipes.ContainsKey(name) && !Game1.player.knowsRecipe(name) && Rand.NextDouble() < Globals.Config.RecipeChance;
+        bool isRecipe = AssetManager.CachedRecipes.ContainsKey(name) && !Game1.player.knowsRecipe(name) &&
+                        Rand.NextDouble() < Globals.Config.RecipeChance;
 
-        return new Object(tileLocation: Vector2.Zero, parentSheetIndex: id, isRecipe: isRecipe);
+        return new Object(Vector2.Zero, id, isRecipe);
     }
 
     private static Item GetRandomBoots()
@@ -139,7 +138,9 @@ internal static class InventoryRandomizer
 
         // if dyeable, dye a random color
         if (clothing.dyeable.Value)
+        {
             clothing.clothesColor.Value = new Color(Rand.Next(255), Rand.Next(255), Rand.Next(255));
+        }
 
         return clothing;
     }
@@ -167,7 +168,8 @@ internal static class InventoryRandomizer
         string type = fields[3];
 
         // if recipe exists and player doesn't already know it, 25% chance they'll receive the recipe instead
-        bool isRecipe = AssetManager.CachedRecipes.ContainsKey(name) && !Game1.player.knowsRecipe(name) && Rand.NextDouble() < Globals.Config.RecipeChance;
+        bool isRecipe = AssetManager.CachedRecipes.ContainsKey(name) && !Game1.player.knowsRecipe(name) &&
+                        Rand.NextDouble() < Globals.Config.RecipeChance;
 
         // random quality level - 0, 1, 2, or 4
         int quality = Rand.Next(4);
@@ -175,9 +177,11 @@ internal static class InventoryRandomizer
 
         // rings need to use the ring constructor
         if (name != "Wedding Ring" && type == "Ring")
+        {
             return new Ring(id);
+        }
 
-        return new Object(parentSheetIndex: id, initialStack: 1, isRecipe: isRecipe, quality: quality);
+        return new Object(id, 1, isRecipe, quality: quality);
     }
 
     private static Item GetRandomWeapon()
@@ -185,7 +189,7 @@ internal static class InventoryRandomizer
         (int id, _) = GetRandomElementFromDictionary(AssetManager.CachedWeapons);
 
         // Slingshots are their own class, everything else is a regular melee weapon
-        return (id is 32 or 33 or 34) ? new Slingshot(id) : new MeleeWeapon(id);
+        return id is 32 or 33 or 34 ? new Slingshot(id) : new MeleeWeapon(id);
     }
 
     private static Item GetRandomTool()
@@ -208,7 +212,7 @@ internal static class InventoryRandomizer
                 return new WateringCan {UpgradeLevel = upgradeLevel};
 
             case 4:
-                upgradeLevel = Math.Min(3, upgradeLevel);   // fishing rod upgrade level caps out at 3
+                upgradeLevel = Math.Min(3, upgradeLevel); // fishing rod upgrade level caps out at 3
                 return new FishingRod {UpgradeLevel = upgradeLevel};
 
             case 5:

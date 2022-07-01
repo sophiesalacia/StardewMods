@@ -47,9 +47,9 @@ internal static class AssetManager
     internal static int CachedHatsCount;
     internal static int CachedObjectsCount;
     internal static int CachedWeaponsCount;
-    
+
     /// <summary>
-    /// Reload all data assets and cache the results.
+    ///     Reload all data assets and cache the results.
     /// </summary>
     internal static void ReloadObjectData()
     {
@@ -64,7 +64,7 @@ internal static class AssetManager
     }
 
     /// <summary>
-    /// Reload the given data asset and cache the result.
+    ///     Reload the given data asset and cache the result.
     /// </summary>
     /// <param name="baseName">Name of the asset to reload.</param>
     internal static void ReloadObjectData(string baseName)

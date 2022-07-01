@@ -5,6 +5,7 @@ namespace InventoryRandomizer;
 
 internal class Globals
 {
+    public static IGenericModConfigMenuApi GmcmApi;
     public static ModConfig Config { get; set; }
     public static IManifest Manifest { get; set; }
     public static IModHelper Helper { get; set; }
@@ -19,8 +20,6 @@ internal class Globals
     public static IReflectionHelper ReflectionHelper => Helper.Reflection;
     public static ITranslationHelper TranslationHelper => Helper.Translation;
     public static string UUID => Manifest.UniqueID;
-        
-    public static IGenericModConfigMenuApi GmcmApi;
 
     internal static void InitializeConfig()
     {

@@ -13,7 +13,7 @@ internal class EventHookManager
     }
 
     /// <summary>
-    /// Tries to get and utilize all APIs.
+    ///     Tries to get and utilize all APIs.
     /// </summary>
     private static void InitializeGmcmMenu(object sender, GameLaunchedEventArgs e)
     {
