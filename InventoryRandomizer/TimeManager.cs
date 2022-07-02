@@ -36,7 +36,7 @@ internal class TimeManager
                 // clear my chat messages as they show up, to avoid clogging the chat
                 ChatMessages.RemoveAll(chatMessage =>
                     chatMessage.message[0].message.Contains("Randomizing inventory"));
-                Game1.chatBox.addInfoMessage($"Randomizing inventory in {SecondsUntilRandomization} seconds...");
+                Game1.chatBox.addInfoMessage($"Randomizing inventory in {SecondsUntilRandomization} {(SecondsUntilRandomization == 1 ? "second" : "seconds")}...");
                 ChatMessages[^1].timeLeftToDisplay = 120;
                 return;
 
