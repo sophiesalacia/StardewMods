@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -32,7 +31,7 @@ internal class TimeManager
 
                 Game1.chatBox.addInfoMessage($"Randomizing inventory in {SecondsUntilRandomization} seconds...");
                 ChatMessages[^1].timeLeftToDisplay = 120;
-                return;
+                break;
 
             // send chat messages on final 5 seconds
             case > 0 and < 6:
@@ -45,7 +44,7 @@ internal class TimeManager
                 Game1.chatBox.addInfoMessage(
                     $"Randomizing inventory in {SecondsUntilRandomization} {(SecondsUntilRandomization == 1 ? "second" : "seconds")}...");
                 ChatMessages[^1].timeLeftToDisplay = 120;
-                return;
+                break;
 
             // randomize and reset timer at 0
             case <= 0:
