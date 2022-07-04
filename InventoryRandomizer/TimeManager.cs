@@ -27,7 +27,7 @@ internal class TimeManager
             // send chat message on 60 second intervals and at 30 seconds
             case > 0 when SecondsUntilRandomization % 60 == 0:
             case 30:
-                if (!Globals.Config.PlaySoundOnRandomization)
+                if (!Globals.Config.ChatMessageAlerts)
                     return;
 
                 Game1.chatBox.addInfoMessage($"Randomizing inventory in {SecondsUntilRandomization} seconds...");
@@ -37,7 +37,7 @@ internal class TimeManager
             // send chat messages on final 5 seconds
             case > 0 and < 6:
                 // clear my chat messages as they show up, to avoid clogging the chat
-                if (!Globals.Config.PlaySoundOnRandomization)
+                if (!Globals.Config.ChatMessageAlerts)
                     return;
 
                 ChatMessages.RemoveAll(chatMessage =>
@@ -55,7 +55,7 @@ internal class TimeManager
                     Game1.playSound("cowboy_powerup");
                 }
 
-                if (Globals.Config.PlaySoundOnRandomization)
+                if (Globals.Config.ChatMessageAlerts)
                 {
                     ChatMessages.RemoveAll(chatMessage =>
                         chatMessage.message[0].message.Contains("Randomizing inventory"));
