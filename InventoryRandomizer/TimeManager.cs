@@ -10,9 +10,6 @@ internal class TimeManager
 {
     private static int SecondsUntilRandomization = Globals.Config.SecondsUntilInventoryRandomization;
 
-    private static List<ChatMessage> ChatMessages =
-        Globals.ReflectionHelper.GetField<List<ChatMessage>>(Game1.chatBox, "messages").GetValue();
-
     internal static void OnOneSecondUpdateTicked(object sender, OneSecondUpdateTickedEventArgs e)
     {
         // only count down if save is loaded and player has control
@@ -29,8 +26,7 @@ internal class TimeManager
                 if (!Globals.Config.ChatMessageAlerts)
                     return;
 
-                Game1.chatBox.addInfoMessage($"Randomizing inventory in {SecondsUntilRandomization} seconds...");
-                ChatMessages[^1].timeLeftToDisplay = 120;
+                ChatManager.DisplayTimedChatMessage($"Randomizing inventory in {SecondsUntilRandomization} seconds...", 120);
                 break;
 
             // send chat messages on final 5 seconds
@@ -39,11 +35,12 @@ internal class TimeManager
                 if (!Globals.Config.ChatMessageAlerts)
                     return;
 
-                ChatMessages.RemoveAll(chatMessage =>
-                    chatMessage.message[0].message.Contains("Randomizing inventory"));
-                Game1.chatBox.addInfoMessage(
-                    $"Randomizing inventory in {SecondsUntilRandomization} {(SecondsUntilRandomization == 1 ? "second" : "seconds")}...");
-                ChatMessages[^1].timeLeftToDisplay = 120;
+                ChatManager.ClearPreviousMessages();
+                ChatManager.DisplayTimedChatMessage(
+                    $"Randomizing inventory in {SecondsUntilRandomization} {(SecondsUntilRandomization == 1 ? "second" : "seconds")}...",
+                    120
+                );
+                
                 break;
 
             // randomize and reset timer at 0
@@ -56,10 +53,8 @@ internal class TimeManager
 
                 if (Globals.Config.ChatMessageAlerts)
                 {
-                    ChatMessages.RemoveAll(chatMessage =>
-                        chatMessage.message[0].message.Contains("Randomizing inventory"));
-                    Game1.chatBox.addInfoMessage("Inventory randomized!");
-                    ChatMessages[^1].timeLeftToDisplay = 150;
+                    ChatManager.ClearPreviousMessages();
+                    ChatManager.DisplayTimedChatMessage("Inventory randomized!", 150);
                 }
 
                 InventoryRandomizer.RandomizeInventory();
@@ -74,10 +69,5 @@ internal class TimeManager
     internal static void ResetTimer()
     {
         SecondsUntilRandomization = Globals.Config.SecondsUntilInventoryRandomization;
-    }
-
-    internal static void RegrabChatbox()
-    {
-        ChatMessages = Globals.ReflectionHelper.GetField<List<ChatMessage>>(Game1.chatBox, "messages").GetValue();
     }
 }

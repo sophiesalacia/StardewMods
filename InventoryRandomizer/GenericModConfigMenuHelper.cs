@@ -1,3 +1,5 @@
+using StardewModdingAPI;
+
 namespace InventoryRandomizer;
 
 internal class GenericModConfigMenuHelper
@@ -8,8 +10,17 @@ internal class GenericModConfigMenuHelper
         Globals.GmcmApi.Register(
             Globals.Manifest,
             () => Globals.Config = new ModConfig(),
-            () => Globals.Helper.WriteConfig(Globals.Config)
-        );
+            () =>
+                {
+                    Globals.Helper.WriteConfig(Globals.Config);
+
+                    TimeManager.ResetTimer();
+                    if (Context.IsWorldReady && Globals.Config.ChatMessageAlerts)
+                    {
+                        ChatManager.DisplayCurrentConfigMessage();
+                    }
+                }
+            );
 
         /* General */
 
@@ -28,7 +39,7 @@ internal class GenericModConfigMenuHelper
 
         Globals.GmcmApi.AddBoolOption(
             Globals.Manifest,
-            name: () => "Play Sound on Inventory Randomization",
+            name: () => "Play Sound on Randomization",
             tooltip: () => "Play a sound when the inventory is randomized.",
             getValue: () => Globals.Config.PlaySoundOnRandomization,
             setValue: val => Globals.Config.PlaySoundOnRandomization = val
@@ -36,7 +47,7 @@ internal class GenericModConfigMenuHelper
 
         Globals.GmcmApi.AddNumberOption(
             Globals.Manifest,
-            name: () => "Seconds Until Inventory Randomizations",
+            name: () => "Seconds Until Randomization",
             tooltip: () => "Time in seconds until the inventory is randomized again.",
             getValue: () => Globals.Config.SecondsUntilInventoryRandomization,
             setValue: val => Globals.Config.SecondsUntilInventoryRandomization = val
@@ -134,6 +145,14 @@ internal class GenericModConfigMenuHelper
             getValue: () => Globals.Config.ToolsWeight,
             setValue: val => Globals.Config.ToolsWeight = val,
             min: 0
+        );
+
+        Globals.GmcmApi.OnFieldChanged(
+            Globals.Manifest,
+            onChange: (_, _) =>
+            {
+                
+            }
         );
     }
 }
