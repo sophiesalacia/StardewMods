@@ -1,24 +1,33 @@
+using Force.DeepCloner;
 using StardewModdingAPI;
 
 namespace InventoryRandomizer;
 
 internal class GenericModConfigMenuHelper
 {
+    internal static ModConfig CachedConfig;
+
     internal static void BuildConfigMenu()
     {
         // register mod
         Globals.GmcmApi.Register(
             Globals.Manifest,
-            () => Globals.Config = new ModConfig(),
+            () =>
+                {
+                    Globals.Config = new ModConfig();
+                    CachedConfig = Globals.Config.ShallowClone();
+                },
             () =>
                 {
                     Globals.Helper.WriteConfig(Globals.Config);
 
                     TimeManager.ResetTimer();
-                    if (Context.IsWorldReady && Globals.Config.ChatMessageAlerts)
+                    if (Context.IsWorldReady && Globals.Config.ChatMessageAlerts && ConfigTimeHasChanged())
                     {
                         ChatManager.DisplayCurrentConfigMessage();
                     }
+
+                    CachedConfig = Globals.Config.ShallowClone();
                 }
             );
 
@@ -146,13 +155,9 @@ internal class GenericModConfigMenuHelper
             setValue: val => Globals.Config.ToolsWeight = val,
             min: 0
         );
-
-        Globals.GmcmApi.OnFieldChanged(
-            Globals.Manifest,
-            onChange: (_, _) =>
-            {
-                
-            }
-        );
     }
+
+    private static bool ConfigTimeHasChanged() =>
+        CachedConfig is null || CachedConfig.SecondsUntilInventoryRandomization !=
+        Globals.Config.SecondsUntilInventoryRandomization;
 }
