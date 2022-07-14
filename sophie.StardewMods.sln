@@ -24,9 +24,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SplashText", "SplashText\Sp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SturdySaplings", "SturdySaplings\SturdySaplings.csproj", "{D4F2AAFA-7BEE-4551-9A96-5522F5CA5A48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectTemplate", "ProjectTemplate\ProjectTemplate.csproj", "{E3485620-70BA-45FD-AEB5-3068280488BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectTemplate", "ProjectTemplate\ProjectTemplate.csproj", "{E3485620-70BA-45FD-AEB5-3068280488BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryRandomizer", "InventoryRandomizer\InventoryRandomizer.csproj", "{BAB2A90C-7B66-4364-9C78-31051EF347F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryRandomizer", "InventoryRandomizer\InventoryRandomizer.csproj", "{BAB2A90C-7B66-4364-9C78-31051EF347F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoreTokens", "MoreTokens\MoreTokens.csproj", "{3777F7AF-3D1E-4A51-8517-70A43D81FC73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigurableLuck", "ConfigurableLuck\ConfigurableLuck.csproj", "{3060B5A0-EBA6-4B03-86D2-16709D94C59B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -66,6 +70,14 @@ Global
 		{BAB2A90C-7B66-4364-9C78-31051EF347F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAB2A90C-7B66-4364-9C78-31051EF347F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BAB2A90C-7B66-4364-9C78-31051EF347F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3777F7AF-3D1E-4A51-8517-70A43D81FC73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3777F7AF-3D1E-4A51-8517-70A43D81FC73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3777F7AF-3D1E-4A51-8517-70A43D81FC73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3777F7AF-3D1E-4A51-8517-70A43D81FC73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3060B5A0-EBA6-4B03-86D2-16709D94C59B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3060B5A0-EBA6-4B03-86D2-16709D94C59B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3060B5A0-EBA6-4B03-86D2-16709D94C59B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3060B5A0-EBA6-4B03-86D2-16709D94C59B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
