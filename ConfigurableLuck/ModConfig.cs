@@ -1,3 +1,4 @@
+using StardewModdingAPI;
 using StardewValley;
 
 namespace ConfigurableLuck;
@@ -5,10 +6,13 @@ namespace ConfigurableLuck;
 internal class ModConfig
 {
     public bool Enabled = true;
-    public float LuckValue = 0.0f;
+    public double LuckValue = 0.0f;
 
     internal void ApplyConfigChangesToGame()
     {
+        if (!Context.IsWorldReady)
+            return;
+
         LuckManager.SetLuck(Game1.player, LuckValue);
         Log.Trace($"Updated luck value to {LuckValue}");
     }

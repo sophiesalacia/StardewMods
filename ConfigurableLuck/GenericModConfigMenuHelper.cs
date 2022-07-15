@@ -1,5 +1,4 @@
 using StardewModdingAPI;
-using StardewValley;
 
 namespace ConfigurableLuck;
 
@@ -33,26 +32,30 @@ internal class GenericModConfigMenuHelper
             setValue: val => Globals.Config.Enabled = val
         );
 
+        Globals.GmcmApi.AddParagraph(
+            Globals.Manifest,
+            () => "Note: Vanilla luck goes from Very Bad to Very Good. This mod lets you set your luck outside those values (everything labeled Worst or Best). Unintended behavior may occur.");
+
         Globals.GmcmApi.AddNumberOption(
             Globals.Manifest,
             name: () => "Luck Value",
             tooltip: () => "The value to override your luck with.",
-            getValue: () => Globals.Config.LuckValue,
+            getValue: () => (float)Globals.Config.LuckValue,
             setValue: val => Globals.Config.LuckValue = val,
-            min: -0.12f,
-            max: 0.12f,
+            min: (float)LuckManager.MIN_LUCK_VALUE,
+            max: (float)LuckManager.MAX_LUCK_VALUE,
             interval: 0.01f,
             formatValue: val =>
             {
                 string formattedValue = val switch
                 {
-                    -0.12f => "Worst",
+                    <= -0.12f => "Worst",
                     > -0.12f and < -0.07f => "Very Bad",
                     >= -0.07f and < -0.02f => "Bad",
                     >= -0.02f and <= 0.02f => "Neutral",
                     > 0.02f and <= 0.07f => "Good",
                     > 0.07f and < 0.12f => "Very Good",
-                    0.12f => "Best",
+                    >= 0.12f => "Best",
                     _ => "Unknown"
                 };
                 formattedValue += $"\n({val})";

@@ -27,7 +27,7 @@ internal class ConsoleCommandManager
 
         Globals.CCHelper.Add(
             "sophie.cl.setluck",
-            "Sets luck value for the current player to the specified amount (min: -0.12, max: 0.12",
+            $"Sets luck value for the current player to the specified amount (min: {LuckManager.MIN_LUCK_VALUE}, max: {LuckManager.MAX_LUCK_VALUE}",
             (_, args) =>
             {
                 if (!Globals.Config.Enabled)
@@ -37,13 +37,13 @@ internal class ConsoleCommandManager
                     return;
                 }
 
-                if (!args.Any() || !float.TryParse(args[0], out float luck))
+                if (!args.Any() || !double.TryParse(args[0], out double luck))
                 {
-                    Log.Info("Usage: sophie.cl.setluck <value>\n\tValue should be between -0.12 and 0.12.");
+                    Log.Info($"Usage: sophie.cl.setluck <value>\n\tValue should a be a decimal number between {LuckManager.MIN_LUCK_VALUE} and {LuckManager.MAX_LUCK_VALUE}.");
                     return;
                 }
 
-                Globals.Config.LuckValue = Math.Clamp(luck, -0.12f, 0.12f);
+                Globals.Config.LuckValue = Math.Clamp(luck, LuckManager.MIN_LUCK_VALUE, LuckManager.MAX_LUCK_VALUE);
                 Globals.Config.ApplyConfigChangesToGame();
             }
         );
