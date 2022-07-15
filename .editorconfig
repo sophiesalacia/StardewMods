@@ -98,7 +98,7 @@ csharp_style_conditional_delegate_call = true:suggestion
 csharp_prefer_simple_default_expression = true:suggestion
 
 # prefer method block bodies
-csharp_style_expression_bodied_methods = when_on_single_line:silent
+csharp_style_expression_bodied_methods = false:silent
 csharp_style_expression_bodied_constructors = when_on_single_line:suggestion
 
 # prefer property expression bodies
