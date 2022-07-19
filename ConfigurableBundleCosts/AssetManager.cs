@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -9,7 +8,7 @@ using StardewModdingAPI.Events;
 
 namespace ConfigurableBundleCosts;
 
-internal class AssetHandler
+internal class AssetManager
 {
     public static Dictionary<string, string> BundleData;
 
