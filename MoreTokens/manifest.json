@@ -1,0 +1,13 @@
+﻿{
+    "Name": "More Tokens",
+    "Author": "sophie",
+    "Version": "0.1.0",
+    "Description": "Adds tokens to Content Patcher for use by pack authors.",
+    "UniqueID": "sophie.MoreTokens",
+    "EntryDll": "MoreTokens.dll",
+    "MinimumApiVersion": "3.13.0",
+    "UpdateKeys": [],
+    "Dependencies": [
+        { "UniqueID": "Pathoschild.ContentPatcher" }
+    ] 
+}
