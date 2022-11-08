@@ -46,7 +46,7 @@ public class HarmonyPatches
     {
         try
         {
-            __result = CheckBoardUnlocked();
+            __result = Game1.stats.DaysPlayed >= Globals.Config.GetUnlockDaysPlayed();
             return false;
         }
         catch (Exception ex)
@@ -55,16 +55,4 @@ public class HarmonyPatches
             return true; // run original logic
         }
     }
-
-    /// <summary>
-    /// Determines whether or not the board should be unlocked, according to the configured unlock date.
-    /// Adds setup cutscene to player's viewed cutscenes if they wish to skip it.
-    /// </summary>
-    /// <returns>
-    /// <c>True</c> if board should be unlocked, <c>False</c> otherwise.</returns>
-    public static bool CheckBoardUnlocked()
-    {
-        return Game1.stats.DaysPlayed >= Globals.Config.GetUnlockDaysPlayed();
-    }
-
 }
