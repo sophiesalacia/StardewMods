@@ -52,6 +52,10 @@ internal class SplashText
         xPosition = 0.75f * newSize.X;
         yPosition = 0.55f * newSize.Y;
 
+        drawPosition = new Vector2(xPosition, yPosition);
+        drawPositionOffset1 = new Vector2(xPosition + 4, yPosition + 2);
+        drawPositionOffset2 = new Vector2(xPosition + 2, yPosition + 1);
+
         // determine scaling factor
         windowSizeFactor = newSize.X / 1920f;
     }
@@ -79,7 +83,7 @@ internal class SplashText
     internal static void RenderSplashText(object sender, RenderedActiveMenuEventArgs e)
     {
         // back out if we're on any submenu (New, Load, etc)
-        if (TitleMenu.subMenu is not null)
+        if (Game1.activeClickableMenu is not TitleMenu || TitleMenu.subMenu is not null)
             return;
 
         // update delta time value

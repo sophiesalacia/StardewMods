@@ -1,6 +1,9 @@
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Events;
+using StardewValley;
+using StardewValley.Menus;
 
 namespace SplashText;
 
@@ -10,16 +13,37 @@ internal class EventHookManager
     {
         Globals.EventHelper.Content.AssetRequested += LoadAssets;
 
-        Globals.EventHelper.GameLoop.ReturnedToTitle +=
-            (_, _) => Globals.EventHelper.Display.RenderedActiveMenu += SplashText.RenderSplashText;
-
-        Globals.EventHelper.Display.MenuChanged +=
-            (_, _) => Globals.EventHelper.Display.RenderedActiveMenu -= SplashText.RenderSplashText;
+        Globals.EventHelper.GameLoop.ReturnedToTitle += 
+            (_, _) =>
+            {
+                SplashText.GetRandomSplashText();
+                Globals.EventHelper.Display.RenderedActiveMenu += SplashText.RenderSplashText;
+            };
 
         Globals.EventHelper.Display.WindowResized +=
             (_, args) => SplashText.RecalculatePositionAndSize(args.NewSize);
 
         Globals.EventHelper.Display.RenderedActiveMenu += SplashText.RenderSplashText;
+
+        Globals.EventHelper.GameLoop.OneSecondUpdateTicked += RecalculatePositionAndSizeUponGameLaunch;
+    }
+
+    private static void RecalculatePositionAndSizeUponGameLaunch(object sender, OneSecondUpdateTickedEventArgs e)
+    {
+        if (!IsTitleMenuInteractable())
+            return;
+
+        SplashText.GetRandomSplashText();
+        Globals.EventHelper.GameLoop.OneSecondUpdateTicked -= RecalculatePositionAndSizeUponGameLaunch;
+    }
+
+    private static bool IsTitleMenuInteractable()
+    {
+        if (Game1.activeClickableMenu is not TitleMenu titleMenu || TitleMenu.subMenu != null)
+            return false;
+
+        var method = Globals.Helper.Reflection.GetMethod(titleMenu, "ShouldAllowInteraction", false);
+        return method is not null ? method.Invoke<bool>() : Globals.Helper.Reflection.GetField<bool>(titleMenu, "titleInPosition").GetValue();
     }
 
     private static void LoadAssets(object sender, AssetRequestedEventArgs e)
