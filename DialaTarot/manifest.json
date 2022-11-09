@@ -1,0 +1,10 @@
+﻿{
+    "Name": "DialaTarotCSharp",
+    "Author": "sophie",
+    "Version": "0.1.0",
+    "Description": "Code for Diala's tarot event.",
+    "UniqueID": "sophie.DialaTarotCSharp",
+    "EntryDll": "DialaTarotCSharp.dll",
+    "MinimumApiVersion": "3.13.0",
+    "UpdateKeys": []
+}

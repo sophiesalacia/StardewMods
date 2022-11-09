@@ -36,7 +36,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ColoredCrystalariums", "Col
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConfigurableSpecialOrdersUnlock", "ConfigurableSpecialOrdersUnlock\ConfigurableSpecialOrdersUnlock.csproj", "{686143C0-A6B1-47F7-AAFE-39B98FC2C065}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityUpgradeFramework", "CommunityUpgradeFramework\CommunityUpgradeFramework.csproj", "{9C7C0576-BFD2-436E-8E98-5BB2B15D87C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommunityUpgradeFramework", "CommunityUpgradeFramework\CommunityUpgradeFramework.csproj", "{9C7C0576-BFD2-436E-8E98-5BB2B15D87C0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DialaTarot", "DialaTarot\DialaTarot.csproj", "{F3739A2B-794A-4C98-866C-E740AE8972C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -96,6 +98,10 @@ Global
 		{9C7C0576-BFD2-436E-8E98-5BB2B15D87C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C7C0576-BFD2-436E-8E98-5BB2B15D87C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C7C0576-BFD2-436E-8E98-5BB2B15D87C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3739A2B-794A-4C98-866C-E740AE8972C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3739A2B-794A-4C98-866C-E740AE8972C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3739A2B-794A-4C98-866C-E740AE8972C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3739A2B-794A-4C98-866C-E740AE8972C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
