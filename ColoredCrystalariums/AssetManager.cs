@@ -1,10 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Events;
@@ -30,7 +25,7 @@ public class AssetManager
         }
 
         string packedColorString = ColorOverrides[id];
-        
+
         packedColorString += "ff";
         bool parsed = uint.TryParse(packedColorString, NumberStyles.HexNumber, null, out uint packedColorResult);
         // if successfully parsed, pass back as color - otherwise, get average color for sprite
