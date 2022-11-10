@@ -60,7 +60,7 @@ public class AssetManager
             numPixels++;
         }
 
-        Color averageColor = numPixels > 0 ? new Color(averageR, averageG, averageB) : new Color(255, 255, 255);
+        Color averageColor = numPixels > 1 ? new Color(averageR, averageG, averageB) : new Color(255, 255, 255);
 
         CachedAverageColors[item.ParentSheetIndex] = averageColor;
         return CachedAverageColors[item.ParentSheetIndex];

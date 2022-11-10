@@ -113,17 +113,21 @@ class HarmonyPatches
         float base_sort = (y + 1) * 64 / 10000f + __instance.TileLocation.X / 50000f;
         float yOffset = 4f * (float)Math.Round(value: Math.Sin(a: Game1.currentGameTime.TotalGameTime.TotalMilliseconds / 250.0), digits: 2);
 
-        //spriteBatch.Draw(
-        //    texture: Game1.mouseCursors,
-        //    position: Game1.GlobalToLocal(viewport: Game1.viewport, globalPosition: new Vector2(x: x * 64 - 8, y: y * 64 - 96 - 16 + yOffset)),
-        //    sourceRectangle: new Rectangle(x: 141, y: 465, width: 20, height: 24),
-        //    color: Color.White * 0.75f,
-        //    rotation: 0f,
-        //    origin: Vector2.Zero,
-        //    scale: 4f,
-        //    effects: SpriteEffects.None,
-        //    layerDepth: base_sort + 1E-06f
-        //);
+        if (!Globals.Config.DrawSimplifiedGemBubbles)
+        {
+            spriteBatch.Draw(
+                texture: Game1.mouseCursors,
+                position: Game1.GlobalToLocal(viewport: Game1.viewport,
+                    globalPosition: new Vector2(x: x * 64 - 8, y: y * 64 - 96 - 16 + yOffset)),
+                sourceRectangle: new Rectangle(x: 141, y: 465, width: 20, height: 24),
+                color: Color.White * 0.75f,
+                rotation: 0f,
+                origin: Vector2.Zero,
+                scale: 4f,
+                effects: SpriteEffects.None,
+                layerDepth: base_sort + 1E-06f
+            );
+        }
 
         spriteBatch.Draw(
             texture: Game1.objectSpriteSheet,

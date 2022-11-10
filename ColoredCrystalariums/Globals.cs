@@ -1,3 +1,4 @@
+using ConfigurableBundleCosts;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 
@@ -5,6 +6,7 @@ namespace ColoredCrystalariums;
 
 internal class Globals
 {
+    public static ModConfig Config { get; set; }
     public static IManifest Manifest { get; set; }
     public static IModHelper Helper { get; set; }
     public static ICommandHelper CCHelper => Helper.ConsoleCommands;
@@ -18,14 +20,27 @@ internal class Globals
     public static IReflectionHelper ReflectionHelper => Helper.Reflection;
     public static ITranslationHelper TranslationHelper => Helper.Translation;
     public static string UUID => Manifest.UniqueID;
-
+    
+    public static IGenericModConfigMenuApi GmcmApi;
     public static string CrystalariumOverlayPath => "sophie.ColoredCrystalariums/Overlay";
     public static string ColorOverridesPath => "sophie.ColoredCrystalariums/ColorOverrides";
 
+    internal static void InitializeConfig()
+    {
+        Config = Helper.ReadConfig<ModConfig>();
+    }
+
     internal static void InitializeGlobals(ModEntry modEntry)
     {
+        Log.Monitor = modEntry.Monitor;
         Manifest = modEntry.ModManifest;
         Helper = modEntry.Helper;
-        Log.Monitor = modEntry.Monitor;
+    }
+
+    internal static bool InitializeGmcmApi()
+    {
+        GmcmApi = Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu");
+
+        return GmcmApi is not null;
     }
 }
