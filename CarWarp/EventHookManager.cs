@@ -26,9 +26,11 @@ internal class EventHookManager
         }
     }
 
+
     /// <summary>
     /// Tries to get and utilize all APIs.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1304:Specify CultureInfo", Justification = "<Pending>")]
     private static void HookIntoApis(object sender, GameLaunchedEventArgs e)
     {
         if (!Globals.InitializeSFApi())
