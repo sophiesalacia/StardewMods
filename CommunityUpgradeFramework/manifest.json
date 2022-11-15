@@ -1,0 +1,11 @@
+﻿{
+    "Name": "Community Upgrade Framework",
+    "Author": "sophie",
+    "Version": "0.1.0",
+    "Description": "Removes ability of scythe to cut tree sprouts.",
+    "UniqueID": "sophie.CommunityUpgradeFramework",
+    "EntryDll": "CommunityUpgradeFramework.dll",
+    "MinimumApiVersion": "3.13.0",
+    "UpdateKeys": [ "Nexus:????"],
+    "Dependencies": []
+}
