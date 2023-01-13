@@ -1,7 +1,7 @@
 using System;
 using HarmonyLib;
 
-namespace TarotEvent;
+namespace DialaTarotCSharp;
 
 internal class HarmonyPatcher
 {

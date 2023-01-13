@@ -1,6 +1,6 @@
 using StardewModdingAPI;
 
-namespace TarotEvent;
+namespace DialaTarotCSharp;
 
 // Credit to spacechase0
 internal class Log
