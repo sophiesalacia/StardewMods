@@ -1,0 +1,10 @@
+﻿{
+    "Name": "Umbrellas",
+    "Author": "sophie",
+    "Version": "0.1.0",
+    "Description": "Adds umbrella mechanic for player and umbrellas for NPCs.",
+    "UniqueID": "sophie.Umbrellas",
+    "EntryDll": "Umbrellas.dll",
+    "MinimumApiVersion": "3.13.0",
+    "UpdateKeys": [ "Nexus:???" ]
+}

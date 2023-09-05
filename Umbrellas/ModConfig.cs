@@ -1,0 +1,6 @@
+namespace Umbrellas;
+
+class ModConfig
+{
+
+}
