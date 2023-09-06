@@ -1,7 +1,7 @@
 using StardewModdingAPI;
 // ReSharper disable UnusedMember.Global
 
-namespace SunberryVillage.Utilities;
+namespace ProjectTemplate;
 
 // Credit to kittycatcasey for initial version. i've iterated on it a bit :3
 internal class Log
