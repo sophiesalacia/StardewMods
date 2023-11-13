@@ -1,7 +1,7 @@
 using System;
 using HarmonyLib;
 
-namespace CommunityUpgradeFramework;
+namespace SeeAnimalPronouns;
 
 internal class HarmonyPatcher
 {
@@ -19,6 +19,5 @@ internal class HarmonyPatcher
         {
             Log.Error($"Exception encountered while patching: {ex}");
         }
-
     }
 }

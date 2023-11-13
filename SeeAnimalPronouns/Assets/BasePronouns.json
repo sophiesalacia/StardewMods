@@ -1,0 +1,20 @@
+﻿{
+    "she/her": {
+        "ThirdPersonPronounWithContraction": [ "She's" ]
+    },
+    "he/him": {
+        "ThirdPersonPronounWithContraction": [ "He's" ]
+    },
+    "they/them": {
+        "ThirdPersonPronounWithContraction": [ "They're" ]
+    },
+    "xe/xem": {
+        "ThirdPersonPronounWithContraction": [ "Xe's" ]
+    },
+    "ze/hir": {
+        "ThirdPersonPronounWithContraction": [ "Ze's" ]
+    },
+    "it/it": {
+        "ThirdPersonPronounWithContraction": [ "It's" ]
+    }
+}

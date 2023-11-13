@@ -1,0 +1,10 @@
+﻿{
+    "Name": "MapLightingUtil",
+    "Author": "sophie",
+    "Version": "0.1.0",
+    "Description": "Template project with basic boilerplate for settings up mods.",
+    "UniqueID": "sophie.MapLightingUtil",
+    "EntryDll": "MapLightingUtil.dll",
+    "MinimumApiVersion": "3.13.0",
+    "UpdateKeys": []
+}

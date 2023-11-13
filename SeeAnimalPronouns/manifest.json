@@ -1,0 +1,10 @@
+﻿{
+    "Name": "SeeAnimalPronouns",
+    "Author": "sophie",
+    "Version": "0.1.0",
+    "Description": "Silly little mod that lets you see your animals' pronouns.",
+    "UniqueID": "sophie.SeeAnimalPronouns",
+    "EntryDll": "SeeAnimalPronouns.dll",
+    "MinimumApiVersion": "3.13.0",
+    "UpdateKeys": []
+}

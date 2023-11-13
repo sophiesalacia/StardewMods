@@ -8,5 +8,5 @@
   "Dependencies": [
     { "UniqueID": "Pathoschild.ContentPatcher" }
   ],
-  "UpdateKeys": []
+  "UpdateKeys": [ "Nexus:18776" ]
 }

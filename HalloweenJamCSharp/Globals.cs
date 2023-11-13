@@ -1,7 +1,8 @@
+using HalloweenJamCSharp;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 
-namespace CommunityUpgradeFramework;
+namespace HalloweenJamCSharp;
 
 internal class Globals
 {
@@ -18,7 +19,6 @@ internal class Globals
     public static IReflectionHelper ReflectionHelper => Helper.Reflection;
     public static ITranslationHelper TranslationHelper => Helper.Translation;
     public static string UUID => Manifest.UniqueID;
-    public static string CommunityUpgradesPath => "sophie.CommunityUpgradeFramework/CommunityUpgrades";
 
     internal static void InitializeGlobals(ModEntry modEntry)
     {

@@ -6,7 +6,7 @@ using HarmonyLib;
 using StardewModdingAPI;
 using StardewValley;
 
-namespace ProjectTemplate;
+namespace MapLightingUtil;
 
 internal class ConsoleCommandManager
 {

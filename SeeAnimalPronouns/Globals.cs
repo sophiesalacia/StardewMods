@@ -1,10 +1,13 @@
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 
-namespace CommunityUpgradeFramework;
+namespace SeeAnimalPronouns;
 
 internal class Globals
 {
+    internal static string BasePronounsAssetPath = "sophie.SeeAnimalPronouns/Pronouns";
+    internal static string BasePronounsAssetFilePath = "Assets/BasePronouns.json";
+
     public static IManifest Manifest { get; set; }
     public static IModHelper Helper { get; set; }
     public static ICommandHelper CCHelper => Helper.ConsoleCommands;
@@ -18,7 +21,6 @@ internal class Globals
     public static IReflectionHelper ReflectionHelper => Helper.Reflection;
     public static ITranslationHelper TranslationHelper => Helper.Translation;
     public static string UUID => Manifest.UniqueID;
-    public static string CommunityUpgradesPath => "sophie.CommunityUpgradeFramework/CommunityUpgrades";
 
     internal static void InitializeGlobals(ModEntry modEntry)
     {

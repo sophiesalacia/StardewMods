@@ -1,0 +1,16 @@
+﻿{
+    "Name": "DaysSinceModInstalledToken",
+    "Author": "sophie",
+    "Version": "0.1.0",
+    "Description": "Adds a token to Content Patcher which allows you to see how many days a mod has been installed on a given save.",
+    "UniqueID": "sophie.DSMI",
+    "EntryDll": "DaysSinceModInstalledToken.dll",
+    "MinimumApiVersion": "3.13.0",
+    "UpdateKeys": [],
+    "Dependencies": [
+        {
+            "UniqueID": "Pathoschild.ContentPatcher",
+            "IsRequired": false
+        }
+    ]
+}
