@@ -13,6 +13,9 @@ class EventPatches
     {
         Log.Trace($"Null command triggered. Parameters: {string.Join('/', split)}");
 
+        if (split.Length < 2)
+            return;
+
         switch (split[1])
         {
             case "computerLight":
