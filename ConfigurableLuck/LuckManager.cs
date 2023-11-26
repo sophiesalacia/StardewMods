@@ -12,9 +12,6 @@ internal class LuckManager
     {
         luckValue = Math.Clamp(luckValue, MIN_LUCK_VALUE, MAX_LUCK_VALUE);
 
-        if (player.hasSpecialCharm)
-            player.team.sharedDailyLuck.Value = luckValue - 0.025f;
-        else
-            player.team.sharedDailyLuck.Value = luckValue;
+        player.team.sharedDailyLuck.Value = player.hasSpecialCharm ? luckValue - 0.025f : luckValue;
     }
 }

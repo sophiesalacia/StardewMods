@@ -2,7 +2,7 @@
 	<PropertyGroup>
 	  <AssemblyName>ConfigurableLuck</AssemblyName>
 	  <RootNamespace>ConfigurableLuck</RootNamespace>
-	  <Version>0.1.0</Version>
+	  <Version>0.2.1</Version>
 	  <TargetFramework>net5.0</TargetFramework>
 	  <EnableHarmony>true</EnableHarmony>
 	  <LangVersion>latest</LangVersion>
