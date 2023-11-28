@@ -39,7 +39,7 @@ internal class ConsoleCommandManager
 
                 if (!args.Any() || !double.TryParse(args[0], out double luck))
                 {
-                    Log.Info($"Usage: sophie.cl.setluck <value>\n\tValue should a be a decimal number between {LuckManager.MIN_LUCK_VALUE} and {LuckManager.MAX_LUCK_VALUE}.");
+                    Log.Info($"Usage: sophie.cl.setluck <value>\n\tValue should be a decimal number between {LuckManager.MIN_LUCK_VALUE} and {LuckManager.MAX_LUCK_VALUE}.");
                     return;
                 }
 
