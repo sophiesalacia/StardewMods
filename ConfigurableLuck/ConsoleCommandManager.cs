@@ -27,7 +27,7 @@ internal class ConsoleCommandManager
 
         Globals.CCHelper.Add(
             "sophie.cl.setluck",
-            $"Sets luck value for the current player to the specified amount (min: {LuckManager.MIN_LUCK_VALUE}, max: {LuckManager.MAX_LUCK_VALUE}",
+            $"Sets luck value for the current player to the specified amount (min: {LuckManager.MIN_LUCK_VALUE}, max: {LuckManager.MAX_LUCK_VALUE})",
             (_, args) =>
             {
                 if (!Globals.Config.Enabled)
