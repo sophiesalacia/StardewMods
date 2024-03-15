@@ -1,6 +1,9 @@
+
+// ReSharper disable UnusedMember.Global
+
 using StardewModdingAPI;
 
-namespace InventoryRandomizer;
+namespace Calcifer;
 
 // Credit to kittycatcasey for initial version. i've iterated on it a bit :3
 internal static class Log

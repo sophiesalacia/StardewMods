@@ -1,6 +1,7 @@
 using StardewModdingAPI;
+// ReSharper disable UnusedMember.Global
 
-namespace InventoryRandomizer;
+namespace KitchenCounters;
 
 // Credit to kittycatcasey for initial version. i've iterated on it a bit :3
 internal static class Log

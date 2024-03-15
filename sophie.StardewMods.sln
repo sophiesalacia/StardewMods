@@ -50,7 +50,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DaysSinceModInstalledToken"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinesTokens", "MinesTokens\MinesTokens.csproj", "{392780C6-2003-4F71-9FA7-8F855F09EAA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HalloweenJamCSharp", "HalloweenJamCSharp\HalloweenJamCSharp.csproj", "{B014DB9A-957C-4CCB-8F19-7559F69B8367}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HalloweenJamCSharp", "HalloweenJamCSharp\HalloweenJamCSharp.csproj", "{B014DB9A-957C-4CCB-8F19-7559F69B8367}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KitchenCounters", "KitchenCounters\KitchenCounters.csproj", "{731BC985-928C-4A86-9DAF-4554C9C619A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calcifer", "Calcifer\Calcifer.csproj", "{8837DAF8-6652-47A1-B453-C3E784A080A5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -138,6 +142,14 @@ Global
 		{B014DB9A-957C-4CCB-8F19-7559F69B8367}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B014DB9A-957C-4CCB-8F19-7559F69B8367}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B014DB9A-957C-4CCB-8F19-7559F69B8367}.Release|Any CPU.Build.0 = Release|Any CPU
+		{731BC985-928C-4A86-9DAF-4554C9C619A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{731BC985-928C-4A86-9DAF-4554C9C619A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{731BC985-928C-4A86-9DAF-4554C9C619A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{731BC985-928C-4A86-9DAF-4554C9C619A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8837DAF8-6652-47A1-B453-C3E784A080A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8837DAF8-6652-47A1-B453-C3E784A080A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8837DAF8-6652-47A1-B453-C3E784A080A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8837DAF8-6652-47A1-B453-C3E784A080A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

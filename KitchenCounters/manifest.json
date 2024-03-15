@@ -1,0 +1,10 @@
+﻿{
+    "Name": "KitchenCounters",
+    "Author": "sophie",
+    "Version": "0.1.0",
+    "Description": "Tileable countertops so you can have the kitchen of your dreams.",
+    "UniqueID": "sophie.KitchenCounters",
+    "EntryDll": "KitchenCounters.dll",
+    "MinimumApiVersion": "3.13.0",
+    "UpdateKeys": []
+}
