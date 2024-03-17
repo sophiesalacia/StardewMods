@@ -21,7 +21,7 @@ namespace Calcifer.Features;
 [HarmonyPatch]
 internal class FurnitureOffsetPatches
 {
-    private const string CustomFurnitureOffsetAssetName = "sophie.Calcifer/CustomFurnitureOffsets";
+    private const string CustomFurnitureOffsetAssetName = "sophie.Calcifer/FurnitureOffsets";
 
     private static Dictionary<string, Vector2>? _customFurnitureOffsetAsset;
     internal static Dictionary<string, Vector2> CustomFurnitureOffsetAsset
@@ -151,7 +151,7 @@ internal class FurnitureOffsetPatches
 
 internal static class FurnitureOffsetHooks
 {
-    private const string OffsetAssetString = "sophie.Calcifer/CustomFurnitureOffsets";
+    private const string OffsetAssetString = "sophie.Calcifer/FurnitureOffsets";
     private static readonly IAssetName OffsetAssetName = Globals.GameContent.ParseAssetName(OffsetAssetString);
 
     internal static void InitializeEventHooks()

@@ -7,5 +7,8 @@ internal class EventHookManager
     internal static void InitializeEventHooks()
     {
         CategoryNameOverrideHooks.InitializeEventHooks();
+        FurnitureActionHooks.InitializeEventHooks();
+        FurnitureOffsetHooks.InitializeEventHooks();
+
     }
 }

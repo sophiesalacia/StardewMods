@@ -19,6 +19,7 @@ namespace Calcifer.Features;
 class CategoryNameOverridePatches
 {
     internal static readonly ConditionalWeakTable<string, string> CachedCategoryNameOverrides = new();
+    internal const string CategoryCustomField = "sophie.Calcifer/Category";
 
     [HarmonyPatch(typeof(Object), nameof(Object.getCategoryName))]
     [HarmonyPrefix]
@@ -31,7 +32,7 @@ class CategoryNameOverridePatches
             return false;
         }
         
-        if (Game1.objectData.TryGetValue(__instance.ItemId, out ObjectData objData) && objData.CustomFields is not null && objData.CustomFields.TryGetValue("sophie.Calcifer/CategoryDisplayOverride", out string categoryOverride))
+        if (Game1.objectData.TryGetValue(__instance.ItemId, out ObjectData objData) && objData.CustomFields is not null && objData.CustomFields.TryGetValue(CategoryCustomField, out string categoryOverride))
         {
             __result = categoryOverride;
             __state = false;

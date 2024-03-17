@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using HarmonyLib;
-using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -19,13 +19,14 @@ namespace Calcifer.Features;
 [HarmonyPatch]
 class FurnitureActionPatches
 {
-    private const string ActionsAssetString = "sophie.Calcifer/CustomFurnitureActions";
+    private const string ActionTriggerString = "sophie.Calcifer_FurnitureTriggered";
+    private const string ActionsAssetString = "sophie.Calcifer/FurnitureActions";
 
-    private static Dictionary<string, string>? _customFurnitureActionsAsset;
-    internal static Dictionary<string, string> CustomFurnitureActionsAsset
+    private static Dictionary<string, FurnitureActionData>? _customFurnitureActionsAsset;
+    internal static Dictionary<string, FurnitureActionData> CustomFurnitureActionsAsset
     {
         get => _customFurnitureActionsAsset ??=
-            Globals.GameContent.Load<Dictionary<string, string>>(ActionsAssetString);
+            Globals.GameContent.Load<Dictionary<string, FurnitureActionData>>(ActionsAssetString);
         set => _customFurnitureActionsAsset = value;
     }
 
@@ -35,21 +36,25 @@ class FurnitureActionPatches
     {
         try
         {
+            // do associated tile action stuff
+            if (!CustomFurnitureActionsAsset.TryGetValue(__instance.QualifiedItemId, out FurnitureActionData? actionData))
+                return;
+
+            foreach (FurnitureActionData.FurnitureAction furnitureAction in actionData.TileActions.Where(furnitureAction => GameStateQuery.CheckConditions(furnitureAction.Condition, location: __instance.Location, player: who, inputItem: who.CurrentItem)))
+            {
+                Game1.currentLocation.performAction(furnitureAction.TileAction, who, new Location((int)who.Tile.X, (int)who.Tile.Y));
+                break;
+            }
+        
             // raise trigger
             TriggerActionManager.Raise(
-                trigger: "sophie.CustomFurnitureActions_FurnitureTriggered",
+                trigger: ActionTriggerString,
                 triggerArgs: new object[] { __instance, who },
                 location: __instance.Location,
                 player: who,
                 inputItem: who.CurrentItem,
                 targetItem: __instance
             );
-
-            // do associated tile action stuff
-            if (CustomFurnitureActionsAsset.TryGetValue(__instance.QualifiedItemId, out string? action))
-            {
-                Game1.currentLocation.performAction(action, who, new Location((int)who.Tile.X, (int)who.Tile.Y));
-            }
         }
         catch (Exception e)
         {
@@ -60,12 +65,13 @@ class FurnitureActionPatches
 
 internal static class FurnitureActionHooks
 {
-    private const string ActionsAssetString = "sophie.Calcifer/CustomFurnitureActions";
+    private const string ActionTriggerString = "sophie.Calcifer_FurnitureTriggered";
+    private const string ActionsAssetString = "sophie.Calcifer/FurnitureActions";
     private static readonly IAssetName ActionsAssetName = Globals.GameContent.ParseAssetName(ActionsAssetString);
 
     internal static void InitializeEventHooks()
     {
-        Globals.EventHelper.GameLoop.GameLaunched += (_, _) => TriggerActionManager.RegisterTrigger("sophie.CustomFurnitureActions_FurnitureTriggered");
+        Globals.EventHelper.GameLoop.GameLaunched += (_, _) => TriggerActionManager.RegisterTrigger(ActionTriggerString);
 
         // content pipeline
         Globals.EventHelper.Content.AssetRequested += OnAssetRequested;
@@ -78,7 +84,7 @@ internal static class FurnitureActionHooks
         if (!e.NamesWithoutLocale.Contains(ActionsAssetName))
             return;
 
-        FurnitureActionPatches.CustomFurnitureActionsAsset = Game1.content.Load<Dictionary<string, string>>(ActionsAssetString);
+        FurnitureActionPatches.CustomFurnitureActionsAsset = Game1.content.Load<Dictionary<string, FurnitureActionData>>(ActionsAssetString);
     }
 
     private static void OnAssetReady(object? sender, AssetReadyEventArgs e)
@@ -86,14 +92,25 @@ internal static class FurnitureActionHooks
         if (!e.NameWithoutLocale.IsEquivalentTo(ActionsAssetString))
             return;
 
-        FurnitureActionPatches.CustomFurnitureActionsAsset = Game1.content.Load<Dictionary<string, string>>(ActionsAssetString);
+        FurnitureActionPatches.CustomFurnitureActionsAsset = Game1.content.Load<Dictionary<string, FurnitureActionData>>(ActionsAssetString);
     }
 
     private static void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
     {
         if (e.NameWithoutLocale.IsEquivalentTo(ActionsAssetString))
-            e.LoadFrom(() => new Dictionary<string, string>(), AssetLoadPriority.Low);
+            e.LoadFrom(() => new Dictionary<string, FurnitureActionData>(), AssetLoadPriority.Low);
     }
+}
+
+public class FurnitureActionData
+{
+    public class FurnitureAction
+    {
+        public string Condition = "";
+        public string TileAction = "";
+    }
+
+    public List<FurnitureAction> TileActions = new();
 }
 
 #pragma warning restore IDE1006 // Naming Styles
