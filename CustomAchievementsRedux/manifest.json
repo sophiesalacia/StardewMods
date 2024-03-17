@@ -1,0 +1,11 @@
+﻿{
+    "Name": "Custom Achievements Redux",
+    "Author": "sophie",
+    "Version": "0.1.0",
+    "Description": "Allows content modders to add achievements via Content Patcher.",
+    "UniqueID": "sophie.CustomAchievementsRedux",
+    "EntryDll": "CustomAchievementsRedux.dll",
+    "MinimumApiVersion": "4.0.0-alpha",
+    "UpdateKeys": [ ],
+    "Dependencies": [ ] 
+}
