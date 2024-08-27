@@ -1,11 +1,8 @@
-
-// ReSharper disable UnusedMember.Global
-
 using StardewModdingAPI;
 
-namespace Calcifer;
+namespace SophieShared;
 
-// Credit to kittycatcasey for initial version. i've iterated on it a bit :3
+// Credit to kittycatcasey
 internal static class Log
 {
 	public static IMonitor Monitor;

@@ -67,7 +67,7 @@ internal class ConsoleCommandManager
                     }
                     else
                     {
-                        var npcList = Utility.getAllCharacters(new List<NPC>()).Where(npc => npc.isVillager())
+                        var npcList = Utility.getAllCharacters().Where(npc => npc.IsVillager)
                             .Select(npc => npc.Name);
 
                         output.AppendLine("\n\t" + string.Join("\n\t",

@@ -1,5 +1,4 @@
 using ContentPatcher;
-using SolidFoundations.Framework.Interfaces.Internal;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 
@@ -22,8 +21,7 @@ internal class Globals
     public static ITranslationHelper TranslationHelper => Helper.Translation;
     public static string UUID => Manifest.UniqueID;
     public static string WarpLocationsContentPath => "sophie.CarWarp.Locations";
-
-    public static IApi? SolidFoundationsApi;
+    
     public static IContentPatcherAPI? ContentPatcherApi;
     public static IGenericModConfigMenuApi? GMCMApi;
 
@@ -31,14 +29,7 @@ internal class Globals
     {
         Config = Helper.ReadConfig<ModConfig>();
     }
-
-    internal static bool InitializeSFApi()
-    {
-        SolidFoundationsApi = Helper.ModRegistry.GetApi<IApi>("PeacefulEnd.SolidFoundations");
-
-        return SolidFoundationsApi is not null;
-    }
-
+    
     internal static bool InitializeCPApi()
     {
         ContentPatcherApi = Helper.ModRegistry.GetApi<IContentPatcherAPI>("Pathoschild.ContentPatcher");

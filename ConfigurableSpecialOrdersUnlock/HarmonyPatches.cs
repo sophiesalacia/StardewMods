@@ -1,6 +1,7 @@
 using HarmonyLib;
 using StardewValley;
 using System;
+using StardewValley.SpecialOrders;
 
 namespace ConfigurableSpecialOrdersUnlock;
 

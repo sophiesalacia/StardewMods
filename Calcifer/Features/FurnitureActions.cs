@@ -40,6 +40,7 @@ class FurnitureActionPatches
             if (!CustomFurnitureActionsAsset.TryGetValue(__instance.QualifiedItemId, out FurnitureActionData? actionData))
                 return;
 
+            // iterate through list of possible tile actions, perform first one whose conditions are met
             foreach (FurnitureActionData.FurnitureAction furnitureAction in actionData.TileActions.Where(furnitureAction => GameStateQuery.CheckConditions(furnitureAction.Condition, location: __instance.Location, player: who, inputItem: who.CurrentItem)))
             {
                 Game1.currentLocation.performAction(furnitureAction.TileAction, who, new Location((int)who.Tile.X, (int)who.Tile.Y));
@@ -63,13 +64,14 @@ class FurnitureActionPatches
     }
 }
 
+[HasEventHooks]
 internal static class FurnitureActionHooks
 {
     private const string ActionTriggerString = "sophie.Calcifer_FurnitureTriggered";
     private const string ActionsAssetString = "sophie.Calcifer/FurnitureActions";
     private static readonly IAssetName ActionsAssetName = Globals.GameContent.ParseAssetName(ActionsAssetString);
 
-    internal static void InitializeEventHooks()
+    internal static void InitHooks()
     {
         Globals.EventHelper.GameLoop.GameLaunched += (_, _) => TriggerActionManager.RegisterTrigger(ActionTriggerString);
 

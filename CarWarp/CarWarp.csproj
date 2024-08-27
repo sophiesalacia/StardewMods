@@ -1,6 +1,17 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<!--Updated and released to Nexus-->
+
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+
+    <!--Manifest values-->
+    <Name>Car Warp</Name>
+    <Authors>sophie</Authors>
+    <Description>Extends skellady's decorative Car mod with warp functionality.</Description>
     <Version>2.0.0</Version>
+    <UpdateKeys>Nexus:11102</UpdateKeys>
+    <UniqueId>sophie.CarWarp</UniqueId>
+    <MinimumApiVersion_Behavior>Update</MinimumApiVersion_Behavior>
+
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <EnableHarmony>true</EnableHarmony>
@@ -8,6 +19,7 @@
   </PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Leclair.Stardew.ModManifestBuilder" Version="2.1.0" />
 		<PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.1.1" />
 	</ItemGroup>
 
@@ -15,10 +27,6 @@
 	  <Reference Include="ContentPatcher">
 	    <HintPath>D:\Games\SteamLibrary\steamapps\common\Stardew Valley\Mods\ContentPatcher\ContentPatcher.dll</HintPath>
 	    <Private>false</Private>
-	  </Reference>
-	  <Reference Include="SolidFoundations">
-	    <HintPath>D:\Games\SteamLibrary\steamapps\common\Stardew Valley\Mods\SolidFoundations\SolidFoundations.dll</HintPath>
-	    <Private>False</Private>
 	  </Reference>
 	</ItemGroup>
 </Project>

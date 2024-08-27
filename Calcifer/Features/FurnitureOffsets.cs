@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using HarmonyLib;
@@ -70,38 +69,14 @@ internal class FurnitureOffsetPatches
         if (offset == Vector2.Zero || __state is null)
             return;
 
-        Vector2 rotatedOffset;
-        float currentRotationInRadians, ca, sa;
-
-        switch (__instance.rotations.Value)
-        {
-            case 2:
-                currentRotationInRadians = __instance.currentRotation.Value / 2 * 90 * (float)(Math.PI / 180);
-                ca = (float)Math.Cos(currentRotationInRadians);
-                sa = (float)Math.Sin(currentRotationInRadians);
-                rotatedOffset = new Vector2(ca * offset.X - sa * offset.Y, sa * offset.X + ca * offset.Y);
-                break;
-
-            case 4:
-                currentRotationInRadians = __instance.currentRotation.Value * 90 * (float)(Math.PI / 180);
-                ca = (float)Math.Cos(currentRotationInRadians);
-                sa = (float)Math.Sin(currentRotationInRadians);
-                rotatedOffset = new Vector2(ca * offset.X - sa * offset.Y, sa * offset.X + ca * offset.Y);
-                break;
-
-            default:
-                rotatedOffset = offset;
-                break;
-        }
-
         __instance.heldObject.Value = __state;
 
         if (__instance.heldObject.Value is Furniture furniture)
         {
-            // draw held furniture with custom offset (rotated)
+            // draw held furniture with custom offset
             furniture.drawAtNonTileSpot(
                 spriteBatch: spriteBatch,
-                location: Game1.GlobalToLocal(Game1.viewport, new Vector2(__instance.boundingBox.Center.X - 32 + rotatedOffset.X, __instance.boundingBox.Center.Y - furniture.sourceRect.Height * 4 - (__instance.drawHeldObjectLow.Value ? -16 : 16) + rotatedOffset.Y)),
+                location: Game1.GlobalToLocal(Game1.viewport, new Vector2(__instance.boundingBox.Center.X - 32 + offset.X, __instance.boundingBox.Center.Y - furniture.sourceRect.Height * 4 - (__instance.drawHeldObjectLow.Value ? -16 : 16) + offset.Y)),
                 layerDepth: (__instance.boundingBox.Bottom - 7) / 10000f,
                 alpha: alpha);
         }
@@ -109,10 +84,10 @@ internal class FurnitureOffsetPatches
         {
             ParsedItemData heldItemData = ItemRegistry.GetDataOrErrorItem(__instance.heldObject.Value.QualifiedItemId);
 
-            // draw shadow with custom offset - rotated
+            // draw shadow with custom offset
             spriteBatch.Draw(
                 texture: Game1.shadowTexture,
-                position: Game1.GlobalToLocal(Game1.viewport, new Vector2(__instance.boundingBox.Center.X - 32 + rotatedOffset.X, __instance.boundingBox.Center.Y - (__instance.drawHeldObjectLow.Value ? 32 : 85) + rotatedOffset.Y)) + new Vector2(32f, 53f),
+                position: Game1.GlobalToLocal(Game1.viewport, new Vector2(__instance.boundingBox.Center.X - 32 + offset.X, __instance.boundingBox.Center.Y - (__instance.drawHeldObjectLow.Value ? 32 : 85) + offset.Y)) + new Vector2(32f, 53f),
                 sourceRectangle: Game1.shadowTexture.Bounds,
                 color: Color.White * alpha,
                 rotation: 0f,
@@ -120,10 +95,10 @@ internal class FurnitureOffsetPatches
                 scale: 4f,
                 effects: SpriteEffects.None,
                 layerDepth: __instance.boundingBox.Bottom / 10000f);
-            // draw item with custom offset - rotated
+            // draw item with custom offset
             spriteBatch.Draw(
                 texture: heldItemData.GetTexture(),
-                position: Game1.GlobalToLocal(Game1.viewport, new Vector2(__instance.boundingBox.Center.X - 32 + rotatedOffset.X, __instance.boundingBox.Center.Y - (__instance.drawHeldObjectLow.Value ? 32 : 85) + rotatedOffset.Y)),
+                position: Game1.GlobalToLocal(Game1.viewport, new Vector2(__instance.boundingBox.Center.X - 32 + offset.X, __instance.boundingBox.Center.Y - (__instance.drawHeldObjectLow.Value ? 32 : 85) + offset.Y)),
                 sourceRectangle: heldItemData.GetSourceRect(),
                 color: Color.White * alpha,
                 rotation: 0f,
@@ -149,12 +124,13 @@ internal class FurnitureOffsetPatches
 
 }
 
+[HasEventHooks]
 internal static class FurnitureOffsetHooks
 {
     private const string OffsetAssetString = "sophie.Calcifer/FurnitureOffsets";
     private static readonly IAssetName OffsetAssetName = Globals.GameContent.ParseAssetName(OffsetAssetString);
 
-    internal static void InitializeEventHooks()
+    internal static void InitHooks()
     {
         // content pipeline
         Globals.EventHelper.Content.AssetRequested += OnAssetRequested;

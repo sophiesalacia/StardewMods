@@ -1,6 +1,8 @@
 
 // ReSharper disable UnusedMember.Global
 
+using StardewModdingAPI;
+
 namespace ThankYouCA;
 
 // Credit to kittycatcasey for initial version. i've iterated on it a bit :3

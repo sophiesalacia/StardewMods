@@ -1,9 +1,10 @@
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 
-namespace Calcifer;
+namespace SophieShared;
 
-internal static class Globals
+[HasEventHooks(HookPriority.High)]
+internal static partial class Globals
 {
     public static IManifest Manifest { get; set; }
     public static IModHelper Helper { get; set; }
@@ -17,12 +18,23 @@ internal static class Globals
     public static IMultiplayerHelper MultiplayerHelper => Helper.Multiplayer;
     public static IReflectionHelper ReflectionHelper => Helper.Reflection;
     public static ITranslationHelper TranslationHelper => Helper.Translation;
+    public static IModRegistry ModRegistry => Helper.ModRegistry;
     public static string UUID => Manifest.UniqueID;
 
-    internal static void InitializeGlobals(ModEntry modEntry)
+    public static IContentPatcherApi? ContentPatcherApi;
+
+    internal static void InitializeGlobals(Mod modEntry)
     {
         Manifest = modEntry.ModManifest;
         Helper = modEntry.Helper;
         Log.Monitor = modEntry.Monitor;
+    }
+
+    internal static void InitHooks()
+    {
+        EventHelper.GameLoop.GameLaunched += (_, _) =>
+            {
+                ContentPatcherApi = Helper.ModRegistry.GetApi<IContentPatcherApi>("Pathoschild.ContentPatcher");
+            };
     }
 }

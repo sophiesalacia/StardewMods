@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
-using static SolidFoundations.Framework.Interfaces.Internal.IApi;
+using StardewValley;
+using StardewValley.Buildings;
 
 namespace CarWarp;
 
@@ -33,12 +35,6 @@ internal class EventHookManager
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1304:Specify CultureInfo", Justification = "<Pending>")]
     private static void HookIntoApis(object? sender, GameLaunchedEventArgs e)
     {
-        if (!Globals.InitializeSFApi() || Globals.SolidFoundationsApi is null)
-        {
-            Log.Warn("Failed to fetch SolidFoundations API.");
-            return;
-        }
-
         if (!Globals.InitializeCPApi() || Globals.ContentPatcherApi is null)
         {
             Log.Warn("Failed to fetch ContentPatcher API.");
@@ -59,11 +55,11 @@ internal class EventHookManager
                 return new[] {
                     Globals.Config.Configuration.ToLower() switch
                     {
-                        "right" =>  "sophie\\CarWarp\\overlay-steering-wheel-right",
-                        "left" =>   "sophie\\CarWarp\\overlay-steering-wheel-left",
-                        "none" =>   "sophie\\CarWarp\\overlay-no-steering-wheel",
-                        "empty" =>  "sophie\\CarWarp\\overlay-no-dashboard",
-                        _ =>        "sophie\\CarWarp\\overlay-steering-wheel-right"
+                        "right" =>  "overlay-steering-wheel-right",
+                        "left" =>   "overlay-steering-wheel-left",
+                        "none" =>   "overlay-no-steering-wheel",
+                        "empty" =>  "overlay-no-dashboard",
+                        _ =>        "overlay-steering-wheel-right"
                     }
                 };
             }
@@ -74,19 +70,22 @@ internal class EventHookManager
                 return new[] { Globals.Config.SeasonalOverlay.ToString() };
             }
         );
-
-        Globals.SolidFoundationsApi.BroadcastSpecialActionTriggered += OnBroadcastTriggered;
+        
+        GameLocation.RegisterTileAction("sophie.CarWarp/Activate", HandleWarp);
     }
 
-    /// <summary>
-    /// Intercepts the Broadcast message from skell's Car, triggering the warp dialogue.
-    /// </summary>
-    private static void OnBroadcastTriggered(object? sender, BroadcastEventArgs e)
+    private static bool HandleWarp(GameLocation location, string[] args, Farmer player, Point tile)
     {
-        if (e.BuildingId is "skellady.SF.cars_Car")
+        Building car = location.getBuildingAt(tile.ToVector2());
+
+        if (car is null or not {buildingType.Value: "skellady.CW_Car"})
         {
-            // pass car to CarWarp and initiate activation
-            new CarWarp(e.Building).Activate();
+            Log.Warn($"Tile action \"sophie.CarWarp/Active\" triggered from tile position {tile}, but no appropriate building found at that location.");
+            return false;
         }
+
+        new CarWarp(car).Activate();
+
+        return true;
     }
 }

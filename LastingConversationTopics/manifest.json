@@ -1,10 +1,20 @@
-﻿{
-    "Name": "Lasting Conversation Topics",
-    "Author": "sophie",
-    "Version": "0.2.1",
-    "Description": "Extends given conversation topics indefinitely.",
-    "UniqueID": "sophie.LastingCTs",
-    "EntryDll": "LastingConversationTopics.dll",
-    "MinimumApiVersion": "3.14.0",
-    "UpdateKeys": [ "Nexus:14377@LastingConversationTopics" ]
+{
+  /*
+   | This file is automatically updated by ModManifestBuilder
+   | when the project is compiled.
+   | 
+   | Changes made to this file may be overwritten.
+   | 
+   */
+  "$schema": "https://smapi.io/schemas/manifest.json",
+  "UniqueID": "sophie.LastingConversationTopics",
+  "Name": "Lasting Conversation Topics",
+  "Author": "sophie",
+  "Version": "0.2.1",
+  "Description": "Extends given conversation topics indefinitely.",
+  "MinimumApiVersion": "4.0",
+  "EntryDll": "LastingConversationTopics.dll",
+  "UpdateKeys": [
+    "Nexus:14377@LastingConversationTopics"
+  ]
 }

@@ -52,7 +52,7 @@ internal class DaysSinceModInstalledToken
     public bool UpdateContext()
     {
         bool hasChanged = DaysSinceModInstalledHelper.ModInstallStrings.Equals(CachedModInstallStrings);
-        CachedModInstallStrings = DaysSinceModInstalledHelper.ModInstallStrings;
+        CachedModInstallStrings = new(DaysSinceModInstalledHelper.ModInstallStrings);
 
         return hasChanged;
     }
@@ -86,7 +86,7 @@ internal static class DaysSinceModInstalledHelper
 
     internal static void LoadOrCreateFile(object? sender, SaveLoadedEventArgs e)
     {
-        CurrentSaveId = Constants.SaveFolderName!;
+        CurrentSaveId = Constants.SaveFolderName;
         ModInstallStrings = Globals.DataHelper.ReadJsonFile<Dictionary<string, int>>(PathUtilities.NormalizePath($"data/{CurrentSaveId}/data.json")) ?? new();
         InitializeMissingModInstallStrings();
     }

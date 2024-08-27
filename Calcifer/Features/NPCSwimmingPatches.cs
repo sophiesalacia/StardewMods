@@ -20,13 +20,21 @@ class NPCSwimmingPatches
         {
             __instance.swimming.Value = true;
         }
+        else if (behaviorName == $"{__instance.Name}_stopSwimming")
+        {
+            __instance.swimming.Value = false;
+        }
     }
 
     [HarmonyPatch(typeof(NPC), "startRouteBehavior")]
     [HarmonyPostfix]
     public static void startRouteBehavior_Postfix(NPC __instance, string behaviorName)
     {
-        if (behaviorName == $"{__instance.Name}_stopSwimming")
+        if (behaviorName == $"{__instance.Name}_startSwimmingNow")
+        {
+            __instance.swimming.Value = true;
+        }
+        else if (behaviorName == $"{__instance.Name}_stopSwimmingNow")
         {
             __instance.swimming.Value = false;
         }

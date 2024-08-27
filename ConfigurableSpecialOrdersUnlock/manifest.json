@@ -1,10 +1,20 @@
-﻿{
+{
+  /*
+   | This file is automatically updated by ModManifestBuilder
+   | when the project is compiled.
+   | 
+   | Changes made to this file may be overwritten.
+   | 
+   */
+  "$schema": "https://smapi.io/schemas/manifest.json",
+  "UniqueID": "sophie.ConfigurableSpecialOrdersUnlock",
   "Name": "Configurable Special Orders Unlock",
   "Author": "sophie",
   "Version": "0.2.1",
   "Description": "Mod to configure the unlock requirements of the Special Orders Board.",
-  "UniqueID": "Vertigon.ConfigurableSpecialOrdersUnlock",
+  "MinimumApiVersion": "4.0",
   "EntryDll": "ConfigurableSpecialOrdersUnlock.dll",
-  "MinimumApiVersion": "3.0.0",
-  "UpdateKeys": [ "Nexus:8690" ]
+  "UpdateKeys": [
+    "Nexus:8690"
+  ]
 }

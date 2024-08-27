@@ -20,10 +20,10 @@ internal class EventHookManager
         if (Game1.stats.DaysPlayed < Globals.Config.GetUnlockDaysPlayed())
             return;
 
-        if (!Globals.Config.SkipCutscene || Game1.player.eventsSeen.Contains(15389722))
+        if (!Globals.Config.SkipCutscene || Game1.player.eventsSeen.Contains("15389722"))
             return;
             
-        Game1.player.eventsSeen.Add(15389722);
+        Game1.player.eventsSeen.Add("15389722");
         Log.Info("Skipping Special Orders board installation cutscene");
     }
 
