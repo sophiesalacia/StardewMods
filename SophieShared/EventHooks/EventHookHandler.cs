@@ -14,10 +14,10 @@ internal static class EventHookHandler
 
         try
         {
-		    List<Type> types = new StackTrace().GetFrame(1)?.GetMethod()?.ReflectedType?.Assembly.GetTypes().ToList() ?? new();
+		    List<Type> types = new StackTrace().GetFrame(1)?.GetMethod()?.ReflectedType?.Assembly.GetTypes().ToList() ?? new List<Type>();
 
             // priority is ordered low to high
-            foreach (Type t in types.ToList().Where(t => t.GetCustomAttribute<HasEventHooksAttribute>() is not null).OrderBy(type => type.GetCustomAttribute<HasEventHooksAttribute>()!.Priority))
+            foreach (Type t in types.Where(t => t.GetCustomAttribute<HasEventHooksAttribute>() is not null).OrderBy(type => type.GetCustomAttribute<HasEventHooksAttribute>()!.Priority))
             {
                 MethodInfo? m = t.GetMethod("InitHooks", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
                 m?.Invoke(null, null);
