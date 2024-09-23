@@ -1,0 +1,26 @@
+{
+  /*
+   | This file is automatically updated by ModManifestBuilder
+   | when the project is compiled.
+   | 
+   | Changes made to this file may be overwritten.
+   | 
+   */
+  "$schema": "https://smapi.io/schemas/manifest.json",
+  "UniqueID": "sophie.Eavesdrop",
+  "Name": "Eavesdrop",
+  "Author": "sophie",
+  "Version": "0.1.0-Debug",
+  "Description": "Description pending.",
+  "MinimumApiVersion": "4.0",
+  "EntryDll": "Eavesdrop.dll",
+  "Dependencies": [
+    {
+      "UniqueID": "Pathoschild.ContentPatcher",
+      "MinimumVersion": "2.0"
+    }
+  ],
+  "UpdateKeys": [
+    "Nexus:-1"
+  ]
+}
