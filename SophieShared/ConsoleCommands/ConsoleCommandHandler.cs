@@ -14,7 +14,7 @@ internal static class ConsoleCommandHandler
 
         try
         {
-		    List<Type> types = new StackTrace().GetFrame(1)?.GetMethod()?.ReflectedType?.Assembly.GetTypes().ToList() ?? new List<Type>();
+		    List<Type> types = new StackTrace().GetFrame(1)?.GetMethod()?.ReflectedType?.Assembly.GetTypes().ToList() ?? [];
             
             foreach (Type t in types)
             {

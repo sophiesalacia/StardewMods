@@ -51,17 +51,17 @@ internal class StatToken
 
         foreach (PropertyInfo property in StatProperties)
         {
-            if (property.GetValue(CachedStats) != property.GetValue(newStats))
-            {
-                hasChanged = true;
-                property.SetValue(CachedStats, property.GetValue(newStats));
-            }
+            if (property.GetValue(CachedStats) == property.GetValue(newStats))
+                continue;
+
+            hasChanged = true;
+            property.SetValue(CachedStats, property.GetValue(newStats));
         }
 
         if (CachedStats.Values.Count != newStats.Values.Count || !CachedStats.Values.Keys.Any(key => !newStats.Values.ContainsKey(key) || newStats.Values[key] != CachedStats.Values[key]))
         {
             hasChanged = true;
-            CachedStats.Values = new(newStats.Values);
+            CachedStats.Values = new SerializableDictionaryWithCaseInsensitiveKeys<uint>(newStats.Values);
         }
 
         return hasChanged;
@@ -79,24 +79,17 @@ internal class StatToken
     public IEnumerable<string> GetValues(string? input)
     {
         if (string.IsNullOrEmpty(input) || CachedStats is null)
-            return Enumerable.Empty<string>();
+            return [];
 
         PropertyInfo? inputProperty = StatProperties.FirstOrDefault(propertyInfo => propertyInfo.Name == input);
-        if (inputProperty is not null)
+        if (inputProperty is null)
         {
-            object? propVal = inputProperty.GetValue(CachedStats);
-
-            if (propVal is null)
-                return Enumerable.Empty<string>();
-
-            return new[] { ((uint)propVal).ToString() };
+            return CachedStats.Values.TryGetValue(input, out uint val) ? [val.ToString()] : [];
         }
 
-        if (CachedStats.Values.TryGetValue(input, out uint val))
-        {
-            return new[] { val.ToString() };
-        }
+        object? propVal = inputProperty.GetValue(CachedStats);
 
-        return Enumerable.Empty<string>();
+        return propVal is null ? [] : [((uint)propVal).ToString()];
+
     }
 }

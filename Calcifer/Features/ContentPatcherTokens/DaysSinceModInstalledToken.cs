@@ -49,29 +49,24 @@ internal class DaysSinceModInstalledToken
     public bool UpdateContext()
     {
         bool hasChanged = DaysSinceModInstalledHelper.ModInstallStrings.Equals(CachedModInstallStrings);
-        CachedModInstallStrings = new(DaysSinceModInstalledHelper.ModInstallStrings);
+        CachedModInstallStrings = new Dictionary<string, int>(DaysSinceModInstalledHelper.ModInstallStrings);
 
         return hasChanged;
     }
 
     public IEnumerable<string> GetValues(string input)
     {
-        if (CachedModInstallStrings.TryGetValue(input, out int value))
-        {
-            return new string[] { value.ToString() };
-        }
-
-        return new string[] { "-1" };
+        return CachedModInstallStrings.TryGetValue(input, out int value) ? [value.ToString()] : ["-1"];
     }
 }
 
 internal static class DaysSinceModInstalledHelper
 {
     internal static Dictionary<string, int> ModInstallStrings = new();
-    internal static List<string> ModList = new();
+    internal static List<string> ModList = [];
     internal static string? CurrentSaveId;
 
-    internal static bool IsModLoaded(string modUniqueId)
+    internal static bool IsModLoaded(string? modUniqueId)
     {
         return modUniqueId is not null && Globals.ModRegistry.IsLoaded(modUniqueId);
     }
@@ -84,7 +79,7 @@ internal static class DaysSinceModInstalledHelper
     internal static void LoadOrCreateFile()
     {
         CurrentSaveId = Constants.SaveFolderName;
-        ModInstallStrings = Globals.DataHelper.ReadJsonFile<Dictionary<string, int>>(PathUtilities.NormalizePath($"data/{CurrentSaveId}/data.json")) ?? new();
+        ModInstallStrings = Globals.DataHelper.ReadJsonFile<Dictionary<string, int>>(PathUtilities.NormalizePath($"data/{CurrentSaveId}/data.json")) ?? new Dictionary<string, int>();
         InitializeMissingModInstallStrings();
     }
 
@@ -92,8 +87,7 @@ internal static class DaysSinceModInstalledHelper
     {
         foreach (string modId in ModList)
         {
-            if (!ModInstallStrings.ContainsKey(modId))
-                ModInstallStrings.Add(modId, 0);
+            ModInstallStrings.TryAdd(modId, 0);
         }
     }
 

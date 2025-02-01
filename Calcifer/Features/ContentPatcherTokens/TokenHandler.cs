@@ -26,5 +26,6 @@ internal class TokenHandler
         Globals.ContentPatcherApi.RegisterToken(Globals.Manifest, "DaysSinceModInstalled", new DaysSinceModInstalledToken());
 
         MinesTokens.RegisterTokens();
+        ShortDayNameToken.RegisterToken();
     }
 }
