@@ -1,11 +1,26 @@
-﻿{
-    "Name": "Custom Achievements Redux",
-    "Author": "sophie",
-    "Version": "0.1.0",
-    "Description": "Allows content modders to add achievements via Content Patcher.",
-    "UniqueID": "sophie.CustomAchievementsRedux",
-    "EntryDll": "CustomAchievementsRedux.dll",
-    "MinimumApiVersion": "4.0.0-alpha",
-    "UpdateKeys": [ ],
-    "Dependencies": [ ] 
+{
+  /*
+   | This file is automatically updated by ModManifestBuilder
+   | when the project is compiled.
+   | 
+   | Changes made to this file may be overwritten.
+   | 
+   */
+  "$schema": "https://smapi.io/schemas/manifest.json",
+  "UniqueID": "sophie.CustomAchievementsRedux",
+  "Name": "Custom Achievements Redux",
+  "Author": "sophie",
+  "Version": "0.1.0-Debug",
+  "Description": "Framework for custom achievements.",
+  "MinimumApiVersion": "4.1",
+  "EntryDll": "CustomAchievementsRedux.dll",
+  "Dependencies": [
+    {
+      "UniqueID": "Pathoschild.ContentPatcher",
+      "MinimumVersion": "2.4"
+    }
+  ],
+  "UpdateKeys": [
+    "Nexus:???"
+  ]
 }

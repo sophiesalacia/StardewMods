@@ -178,6 +178,7 @@ Global
 		SolutionGuid = {1324314A-D271-41A1-850B-EB36012C3F61}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		SophieShared\SophieShared.projitems*{2b10c5f6-f3cf-4da8-8120-8decdc83daa9}*SharedItemsImports = 5
 		SophieShared\SophieShared.projitems*{8837daf8-6652-47a1-b453-c3e784a080a5}*SharedItemsImports = 5
 		SophieShared\SophieShared.projitems*{920ae37e-a070-4b2c-b746-56b8ac79b304}*SharedItemsImports = 13
 		SophieShared\SophieShared.projitems*{ee0bf307-28cf-49e6-97ad-0c18e917398a}*SharedItemsImports = 5
