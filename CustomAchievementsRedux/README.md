@@ -15,7 +15,7 @@ Achievements are contained in packs, which are created by modifying the asset `s
 
 The Achievement model has the following fields:
 | Field | Required | Description |
-| --- | --- | --- |
+| --- | :---: | --- |
 | Id | ✔ | The internal ID for the achievement. This is used whenever referring to the achievement - for example, giving it to the player or querying if they have it. |
 | DisplayName | | The name to display when hovering over the achievement. Should be i18n'ed for easy translation support. Defaults to the achievement ID if not provided. |
 | RevealCondition | | A game state query that determines whether the achievement should be revealed or not. When the condition is not met, the achievement will show in the locked state (name displays as "???"). Defaults to true (achievement is revealed from the start). |
