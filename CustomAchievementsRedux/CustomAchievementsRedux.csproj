@@ -7,7 +7,7 @@
     <Authors>sophie</Authors>
     <Description>Framework for custom achievements.</Description>
     <Version>0.1.0</Version>
-    <UpdateKeys>Nexus:???</UpdateKeys>
+    <UpdateKeys>Nexus:31429</UpdateKeys>
     <UniqueId>sophie.CustomAchievementsRedux</UniqueId>
     <MinimumApiVersion_Behavior>Update</MinimumApiVersion_Behavior>
     <MinimumGameVersion_Behavior>Update</MinimumGameVersion_Behavior>
