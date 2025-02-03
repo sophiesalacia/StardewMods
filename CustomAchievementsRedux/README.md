@@ -1,8 +1,8 @@
 ﻿# Custom Achievements Redux
 *by sophie*
 
-[NexusMods]()  
-[GitHub]()
+[NexusMods](https://www.nexusmods.com/stardewvalley/mods/31429)  
+[GitHub](https://github.com/sophiesalacia/StardewMods/tree/main/CustomAchievementsRedux)
 
 ## Creating Achievements
 
