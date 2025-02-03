@@ -35,17 +35,17 @@ Here is a very basic example of an achievement pack with one achievement in it:
     "Action": "EditData",
     "Target": "sophie.CustomAchievementsRedux/Achievements",
     "Entries": {
-        "TestAchievementsPack": {
-            "DisplayName": "Test Achievements Pack",
+        "ExampleAchievementsPack": {
+            "DisplayName": "Example Achievements Pack",
             "Achievements": [
                 {
-                    "Id": "PublicTransit",
+                    "Id": "PublicTransitFan",
                     "DisplayName": "Public Transit Fan",
                     "RevealCondition": "PLAYER_VISITED_LOCATION Current BusStop",
                     "LockedDescription": "Surely this town has some sort of public transportation...",
                     "UnobtainedDescription": "Maybe that old bus can be fixed up...",                                
                     "ObtainedDescription": "Fix up the bus.",
-                    "Texture": "Mods\\sophie.CARTestPack\\Icons",
+                    "Texture": "Mods\\sophie.ExamplePack\\Icons",
                     "BaseSpriteIndex": 0,
                     "OverlaySpriteIndex": 1
                 }
@@ -70,6 +70,13 @@ Some examples of various combinations of base sprites and overlay sprites are be
 ![Base and Overlay Provided](images/BaseOverlay.png)
 
 
+## IDs
+
+Everywhere this documentation refers to "full ID", it means the pack ID followed by the achievement ID, separated by a slash. It's important to use this when called for because multiple packs can have achievements with the same ID, and this is a consistent way to differentiate them since pack IDs cannot be the same.
+
+In the example above, the full ID of the "Public Transit Fan" achievement would be `ExampleAchievementsPack/PublicTransitFan`.
+
+
 ## Giving Achievements
 
 Achievements are given through the [action](https://stardewvalleywiki.com/Modding:Trigger_actions) `sophie.CustomAchievementsRedux/GiveAchievement`. This is because, especially when combined with [game state queries](https://stardewvalleywiki.com/Modding:Game_state_queries), actions are incredibly flexible and powerful. They can be used to give achievements through:
@@ -79,6 +86,8 @@ Achievements are given through the [action](https://stardewvalleywiki.com/Moddin
 - seeing NPC dialogue
 
 in addition to everything that trigger actions themselves are capable of. When combined with a mod that expands on the available triggers, such as [BETAS](https://www.nexusmods.com/stardewvalley/mods/27100), the possibilities are enormous.
+
+The syntax is `sophie.CustomAchievementsRedux/GiveAchievement <achievement full ID>`.
 
 
 ## Queries
@@ -91,11 +100,6 @@ CAR provides a [game state query](https://stardewvalleywiki.com/Modding:Game_sta
 In addition to the game state query, CAR provides a Content Patcher token, `sophie.CustomAchievementsRedux/PlayerHasAchievement`. It works similarly to the query, except that the player argument is optional and must be provided via named argument. For example:
 `{{sophie.CustomAchievementsRedux/PlayerHasAchievement:MyAchievementId}}` will return whether the local player has the achievement.
 `{{sophie.CustomAchievementsRedux/PlayerHasAchievement:MyAchievementId |player=Host}}` will return whether the *host* has the achievement.
-
-
-## IDs
-
-Everywhere I mention an achievement's "full ID", I'm referring to the pack ID followed by the achievement ID, separated by a slash. It's important to use this when called for because multiple packs can have achievements with the same ID, and there needs to be a consistent way to differentiate them.
 
 
 ## Console Commands
@@ -113,7 +117,7 @@ Examples:
 
 ### sophie.car.clear
 
-Clears all achievements from the player that have the provided pack ID.
+Clears all achievements which are from the pack with the provided ID.
 
 Examples:
 
