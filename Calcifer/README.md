@@ -26,7 +26,7 @@ For example, the following patch adds an object "Pizza Bagel" with a custom cate
     "Action": "EditData",
     "Target": "Data/Objects",
     "Entries": {
-        "206": {
+        "MyMod_PizzaBagel": {
             "Name": "Pizza Bagel",
             // rest of object definition
             "CustomFields": {
