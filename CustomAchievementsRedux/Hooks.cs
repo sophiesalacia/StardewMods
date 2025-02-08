@@ -15,7 +15,8 @@ public class Hooks
         // when collections menu is opened, inject custom achievements
         Globals.EventHelper.Display.MenuChanged += AlterCollectionsMenu;
 
-        // register trigger action, query, token
+        // register trigger, action, query, token
+        Globals.EventHelper.GameLoop.GameLaunched += RegisterTrigger;
         Globals.EventHelper.GameLoop.GameLaunched += RegisterAction;
         Globals.EventHelper.GameLoop.GameLaunched += RegisterQuery;
         Globals.EventHelper.GameLoop.GameLaunched += RegisterToken;
@@ -23,6 +24,11 @@ public class Hooks
         // content pipeline
         Globals.EventHelper.Content.AssetReady += OnAssetReady;
         Globals.EventHelper.Content.AssetRequested += OnAssetRequested;
+    }
+
+    private static void RegisterTrigger(object? sender, GameLaunchedEventArgs e)
+    {
+        TriggerActionManager.RegisterTrigger("sophie.CustomAchievementsRedux/AchievementObtained");
     }
 
     private static void RegisterToken(object? sender, GameLaunchedEventArgs e)
@@ -41,6 +47,12 @@ public class Hooks
     private static void RegisterQuery(object? sender, GameLaunchedEventArgs e)
     {
         GameStateQuery.Register("sophie.CustomAchievementsRedux_PlayerHasAchievement", PlayerHasAchievementQuery);
+        GameStateQuery.Register("sophie.CustomAchievementsRedux_PlayerIsGettingAchievement", PlayerIsGettingAchievementQuery);
+    }
+
+    private static bool PlayerIsGettingAchievementQuery(string[] query, GameStateQueryContext context)
+    {
+        return ArgUtility.TryGet(query, 1, out string achievementId, out string error, allowBlank: false) ? Manager.GettingAchievement.Equals(achievementId) : GameStateQuery.Helpers.ErrorResult(query, error);
     }
 
     private static bool PlayerHasAchievementQuery(string[] query, GameStateQueryContext context)

@@ -35,7 +35,7 @@ Here is a very basic example of an achievement pack with one achievement in it:
     "Action": "EditData",
     "Target": "sophie.CustomAchievementsRedux/Achievements",
     "Entries": {
-        "ExampleAchievementsPack": {
+        "sophie.ExampleAchievementsPack": {
             "DisplayName": "Example Achievements Pack",
             "Achievements": [
                 {
@@ -74,7 +74,7 @@ Some examples of various combinations of base sprites and overlay sprites are be
 
 Everywhere this documentation refers to "full ID", it means the pack ID followed by the achievement ID, separated by a slash. It's important to use this when called for because multiple packs can have achievements with the same ID, and this is a consistent way to differentiate them since pack IDs cannot be the same.
 
-In the example above, the full ID of the "Public Transit Fan" achievement would be `ExampleAchievementsPack/PublicTransitFan`.
+In the example above, the full ID of the "Public Transit Fan" achievement would be `sophie.ExampleAchievementsPack/PublicTransitFan`.
 
 
 ## Giving Achievements
@@ -89,17 +89,63 @@ in addition to everything that trigger actions themselves are capable of. When c
 
 The syntax is `sophie.CustomAchievementsRedux/GiveAchievement <achievement full ID>`.
 
+An active dialogue event (also known as a conversation topic or CT) is generated whenever the player gets an achievement. The format is always `achievement_<PackId>_<AchievementId>`. In the example pack above, on being given the Public Transit Fan achievement, a CT would be created with the name `achievement_sophie.ExampleAchievementsPack_PublicTransitFan`.
 
-## Queries
 
-CAR provides a [game state query](https://stardewvalleywiki.com/Modding:Game_state_queries), `sophie.CustomAchievementsRedux_PlayerHasAchievement <player> <achievement full ID>`.
+## Query
+
+CAR provides a [game state query](https://stardewvalleywiki.com/Modding:Game_state_queries), `sophie.CustomAchievementsRedux_PlayerHasAchievement <player> <achievement full ID>`. This will work in any context that accepts a game state query.
+
+
+## Trigger
+
+CAR provides a trigger, `sophie.CustomAchievementsRedux/AchievementObtained`, that fires whenever an achievement is obtained, so you can attach whatever actions you want to any achievement being obtained or to a specific achievement being obtained.
+
+For example, the following trigger action would provide the player with a small sum of money whenever an achievement is obtained:
+```json
+{
+    "LogName": "Add Event Trigger Actions",
+    "Action": "EditData",
+    "Target": "Data/TriggerActions",
+    "Entries": {
+        "sophie.ExampleAchievementsPack_MoneyForAchievements": {
+            "Id": "sophie.ExampleAchievementsPack_MoneyForAchievements",
+            "Trigger": "sophie.CustomAchievementsRedux/AchievementObtained",
+            "Action": "AddMoney 500",
+            "MarkActionApplied": false
+        }
+    }
+}
+```
+
+CAR also provides a special query, `sophie.CustomAchievementsRedux_PlayerIsGettingAchievement <achievement full ID>`, **which only works in this trigger context**. If you try to use this query in any other trigger, such as DayStarted or LocationChanged, it will return false, because the player is not getting an achievement at the time. Think of this as a convenient shorthand for complicated queries, to easily let you link an action to a specific achievement being obtained.
+
+For example, the following trigger action would give the player a Special Order upon obtaining the achievement with ID ExamplePackId/SOAchievement:
+```json
+{
+    "LogName": "Add Event Trigger Actions",
+    "Action": "EditData",
+    "Target": "Data/TriggerActions",
+    "Entries": {
+        "sophie.ExampleAchievementsPack_MoneyForAchievements": {
+            "Id": "sophie.ExampleAchievementsPack_MoneyForAchievements",
+            "Trigger": "sophie.CustomAchievementsRedux/AchievementObtained",
+            "Action": "AddSpecialOrder sophie.ExampleAchievementsPack/MySpecialOrder",
+            "Condition": "sophie.CustomAchievementsRedux_PlayerIsGettingAchievement ExamplePackId/SOAchievement"
+        }
+    }
+}
+```
 
 
 ## Content Patcher Token
 
 In addition to the game state query, CAR provides a Content Patcher token, `sophie.CustomAchievementsRedux/PlayerHasAchievement`. It works similarly to the query, except that the player argument is optional and must be provided via named argument. For example:
-`{{sophie.CustomAchievementsRedux/PlayerHasAchievement:MyAchievementId}}` will return whether the local player has the achievement.
-`{{sophie.CustomAchievementsRedux/PlayerHasAchievement:MyAchievementId |player=Host}}` will return whether the *host* has the achievement.
+`{{sophie.CustomAchievementsRedux/PlayerHasAchievement:MyAchievementFullId}}` will return whether the local player has the achievement.
+`{{sophie.CustomAchievementsRedux/PlayerHasAchievement:MyAchievementFullId |player=Host}}` will return whether the *host* has the achievement.
+This supports all player arguments that Content Patcher provides. If provided with a player argument that it can't parse, it will return false.
+
+Keep in mind, based on the update rate of your patch, you may not see the changes reflected immediately. If you can use a GSQ instead of a CP token, that's the recommended method.
 
 
 ## Console Commands

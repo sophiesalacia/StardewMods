@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley.TokenizableStrings;
+using StardewValley.Triggers;
 
 namespace CustomAchievementsRedux;
 
@@ -8,6 +9,7 @@ public class Manager
     public static readonly IAssetName AchievementsAssetName = Globals.GameContent.ParseAssetName("sophie.CustomAchievementsRedux/Achievements");
     private static Dictionary<string, AchievementCollection> _achievementsData;
 
+    internal static string GettingAchievement = "";
     internal static Dictionary<string, AchievementCollection> AchievementsData
     {
         get =>
@@ -31,6 +33,9 @@ public class Manager
 
         player.modData["sophie.CustomAchievementsRedux/Achievements/" + achievementId] = obtained.ToString();
 
+        if (!obtained)
+            return;
+
         string farmerName = Game1.player.Name;
         if (farmerName == "")
         {
@@ -42,6 +47,9 @@ public class Manager
 
         Game1.addHUDMessage(HUDMessage.ForAchievement(achievement.DisplayName));
         Game1.player.autoGenerateActiveDialogueEvent("achievement_" + achievement.FullId.Replace('/', '_'));    // cant remember if slashes in CTs are problematic
+        GettingAchievement = achievement.FullId;    // setting this for special query
+        TriggerActionManager.Raise("sophie.CustomAchievementsRedux/AchievementObtained", [achievement.FullId], Game1.currentLocation, Game1.player);
+        GettingAchievement = "";
     }
 
     public static bool DoesPlayerHaveAchievement(Farmer player, string achievementId)
