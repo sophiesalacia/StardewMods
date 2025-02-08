@@ -174,6 +174,6 @@ Examples:
 
 This was written for Stardew Valley version 1.6.15 and most likely will not work with previous versions. I have no plans to backport it.
 
-There shouldn't be too many mod compatibility issues, as not many mods alter the achievements portion of the collections menu. However, I wouldn't recommend running this alongside erinth's original Custom Achievements mod, as there may be unexpected behavior.
+There shouldn't be too many mod compatibility issues, as not many mods alter the achievements portion of the collections menu. However, I wouldn't recommend running this alongside erinthe's original Custom Achievements mod, as there may be unexpected behavior.
 
 Multiplayer has not been tested and while it should be relatively bug-free, unexpected behavior may occur. This mod is entirely client-side, so queries that check for other players' achievements may fail if those players do not also have CAR installed. Therefore, I would recommend anyone playing multiplayer to ensure that all players joining the server have CAR and any achievement packs installed that the host does.
