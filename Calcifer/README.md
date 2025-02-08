@@ -1,16 +1,18 @@
 ﻿# Calcifer
 *by sophie* 
 
-[NexusMods](https://www.nexusmods.com/stardewvalley/mods/20628)
+[NexusMods](https://www.nexusmods.com/stardewvalley/mods/20628)  
 [GitHub](https://github.com/sophiesalacia/StardewMods/tree/main/Calcifer)
 
-## Table of Contents
+### Table of Contents
 
-[Custom Categories](#custom-categories)
-[Furniture Actions](#furniture-actions)
-[Furniture Offsets](#furniture-offsets)
-[NPC Swimming](#npc-swimming)
-[Content Patcher Tokens](#content-patcher-tokens)
+* [Custom Categories](#custom-categories)  
+* [Furniture Actions](#furniture-actions)  
+  * [Tile Actions](#tile-actions)  
+  * [Trigger Actions](#trigger-actions)
+* [Furniture Offsets](#furniture-offsets)  
+* [NPC Swimming](#npc-swimming)  
+* [Content Patcher Tokens](#content-patcher-tokens)  
 
 ## Custom Categories
 
