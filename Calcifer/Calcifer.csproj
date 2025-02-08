@@ -29,6 +29,11 @@
     <SMAPIDependency Include="Pathoschild.ContentPatcher" Version="2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Queries\" />
+    <Folder Include="Features\TriggerActions\" />
+  </ItemGroup>
+
   <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 
   <Import Project="..\SophieShared\SophieShared.projitems" Label="Shared" />

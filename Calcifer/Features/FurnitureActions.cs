@@ -41,16 +41,19 @@ class FurnitureActionPatches
                 return;
 
             // iterate through list of possible tile actions, perform first one whose conditions are met
+            // update - keep going until told to stop
             foreach (FurnitureActionData.FurnitureAction furnitureAction in actionData.TileActions.Where(furnitureAction => GameStateQuery.CheckConditions(furnitureAction.Condition, location: __instance.Location, player: who, inputItem: who.CurrentItem)))
             {
                 Game1.currentLocation.performAction(furnitureAction.TileAction, who, new Location((int)who.Tile.X, (int)who.Tile.Y));
-                break;
+
+                if (furnitureAction.StopProcessingActions)
+                    break;
             }
         
             // raise trigger
             TriggerActionManager.Raise(
                 trigger: ActionTriggerString,
-                triggerArgs: new object[] { __instance, who },
+                triggerArgs: [__instance, who],
                 location: __instance.Location,
                 player: who,
                 inputItem: who.CurrentItem,
@@ -110,9 +113,10 @@ public class FurnitureActionData
     {
         public string Condition = "";
         public string TileAction = "";
+        public bool StopProcessingActions = true;
     }
 
-    public List<FurnitureAction> TileActions = new();
+    public List<FurnitureAction> TileActions = [];
 }
 
 #pragma warning restore IDE1006 // Naming Styles

@@ -147,7 +147,6 @@ internal static class CGEventHooks
 {
     internal static void InitHooks()
     {
-        Globals.EventHelper.GameLoop.GameLaunched +=
-            (_, _) => Event.RegisterCommand("sophie.Calcifer_CG", CGEventCommand.HandleCommand);
+        //Globals.EventHelper.GameLoop.GameLaunched += (_, _) => Event.RegisterCommand("sophie.Calcifer_CG", CGEventCommand.HandleCommand);
     }
 }
