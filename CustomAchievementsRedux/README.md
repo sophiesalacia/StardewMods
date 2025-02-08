@@ -104,7 +104,6 @@ CAR provides a trigger, `sophie.CustomAchievementsRedux/AchievementObtained`, th
 For example, the following trigger action would provide the player with a small sum of money whenever an achievement is obtained:
 ```json
 {
-    "LogName": "Add Event Trigger Actions",
     "Action": "EditData",
     "Target": "Data/TriggerActions",
     "Entries": {
@@ -123,7 +122,6 @@ CAR also provides a special query, `sophie.CustomAchievementsRedux_PlayerIsGetti
 For example, the following trigger action would give the player a Special Order upon obtaining the achievement with ID ExamplePackId/SOAchievement:
 ```json
 {
-    "LogName": "Add Event Trigger Actions",
     "Action": "EditData",
     "Target": "Data/TriggerActions",
     "Entries": {
