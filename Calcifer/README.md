@@ -12,7 +12,15 @@
   * [Trigger Actions](#trigger-actions)
 * [Furniture Offsets](#furniture-offsets)  
 * [NPC Swimming](#npc-swimming)  
-* [Content Patcher Tokens](#content-patcher-tokens)  
+* [Content Patcher Tokens](#content-patcher-tokens)
+  * [Days Since Mod Installed](#days-since-mod-installed)
+  * [Mines](#mines)
+  * [Stats](#stats)
+  * [Short Day Name](#short-day-name)
+* [Triggers](#triggers)
+  * [Machine Loaded](#machine-loaded)
+  * [Machine Harvested](#machine-harvested)
+  * [Stat Milestone Reached](#stat-milestone-reached)
 
 ## Custom Categories
 
@@ -131,7 +139,7 @@ To use this feature, edit `Data/animationDescriptions` to add animations with th
 
 Then when writing the schedule, including the appropriate key will make the NPC start or stop swimming at that time. The startSwimming and stopSwimming keys will transition the NPC into the swimming state at the *end* of the schedule point, i.e. when they are ready to move to their next schedule point. The startSwimmingNow and stopSwimmingNow keys will immediately transition the NPC to the swimming state once they reach this schedule point.
 
-For example, this pair of patches will make Pierre swim around neck deep in cobblestone for a couple hours in the morning in Spring, with some placeholder animations at the start and end:
+For example, this pair of patches will make Pierre swim around neck deep in cobblestone in the town square for a couple hours on spring mornings, with some placeholder animations at the start and end:
 
 ```json
 {
@@ -153,4 +161,155 @@ For example, this pair of patches will make Pierre swim around neck deep in cobb
 
 ## Content Patcher Tokens
 
-todo
+Calcifer adds several [Content Patcher tokens](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide/tokens.md).
+
+### Days Since Mod Installed
+
+`sophie.Calcifer/DaysSinceModInstalled: <ModUniqueId>`
+
+This token returns the number of in-game days on the current save that each mod has been installed. This allows you to define when things should happen relative to when the mod is installed, instead of relative to the start of the save, giving you better control over pacing when a mod is installed mid-save. This is most effectively utilized by using [query expressions](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide/tokens.md#query-expressions) to compare the given value.
+
+For example, this patch adds a trigger action that sends a letter 5 days after the mod `sophie.ExampleMod` is installed:
+
+```json
+{
+    "Action": "EditData",
+    "Target": "Data/TriggerActions",
+    "Entries": {
+        "sophie.ExampleMod_SendIntroLetter": {
+            "Id": "sophie.ExampleMod_SendIntroLetter",
+            "Trigger": "DayStarted",
+            "Condition": "{{Query: {{sophie.Calcifer/DaysSinceModInstalled}} >= 5}}",
+            "Action": "AddMail Current sophie.ExampleMod_IntroLetter now"
+        }
+    }
+}
+```
+
+### Mines
+
+`sophie.Calcifer/InMines`
+
+Returns whether or not the player is currently in the regular mines (levels 0-120).
+
+`sophie.Calcifer/InQuarry`
+
+Returns whether or not the player is currently in the quarry mine.
+
+`sophie.Calcifer/InSkullCavern`
+
+Returns whether or not the player is currently in the Skull Cavern.
+
+`sophie.Calcifer/CurrentMineLevel`
+
+Returns the current mine level number the player is on, if they are in the mines.
+
+`sophie.Calcifer/DeepestMineLevel`
+
+Returns the deepest mine level number that the player has accessed.
+
+`sophie.Calcifer/IsHardModeActive`
+
+Returns whether or not the mines are on hard mode, either because the Danger In The Deep quest is active or because the player has activated the Shrine of Challenge.
+
+**NOTE: Due to the way Content Patcher uses [update rates](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide.md#how-often-are-patch-changes-applied), patches which rely on these tokens will need to update at a higher rate. This can be performance-heavy, especially when using `OnTimeChange`, so try to use them sparingly.**
+
+### Stats
+
+`sophie.Calcifer/Stat: \<stat name>`
+
+This token will return the current player's current value for the given stat (see the [PLAYER_STAT game state query](https://stardewvalleywiki.com/Modding:Game_state_queries) for a list of stats tracked by vanilla).
+
+### Short Day Name
+
+`sophie.Calcifer/ShortDayName`
+
+This token will return the short name for the current day in English, i.e. "Mon" for "Monday".
+
+
+## Triggers
+
+Calcifer adds several triggers in addition to the Furniture trigger.
+
+### Machine Loaded
+
+`sophie.Calcifer/MachineLoaded`
+
+This fires whenever a player loads an item into a machine. The parameters are:
+
+| Parameter | Description |
+| --- | --- |
+| Player | The player who loaded the item into the machine. |
+| Location | The game location the machine is in. |
+| Target Item | The machine itself. |
+| Input Item | The item placed in the machine. |
+
+### Machine Harvested
+
+`sophie.Calcifer/MachineHarvested`
+
+This fires whenever a player harvests output from a machine. The parameters are:
+
+| Parameter | Description |
+| --- | --- |
+| Player | The player who collected the output from the machine. |
+| Location | The game location the machine is in. |
+| Target Item | The machine itself. |
+| Input Item | The output item collected. |
+
+It seems a bit weird to have the output considered input, but there's no other way to pass that data along so that it's accessible to trigger actions added through Content Patcher.
+
+### Stat Milestone Reached
+
+`sophie.Calcifer/StatMilestoneReached`
+
+This fires whenever a stat is set to a certain amount, as defined by the data asset `sophie.Calcifer/StatMilestones`. The asset consists of a string → model lookup, where the key is a unique ID and the value is a model with the following fields:
+
+| Field | Description |
+| --- | --- |
+| Stat | The stat key to set the milestone for (see the [PLAYER_STAT game state query](https://stardewvalleywiki.com/Modding:Game_state_queries) for a list of stat keys provided by vanilla). |
+| Milestones | A list of numbers to set milestones for. |
+
+The following example sets milestones for the stat "fishCaught" at 50, 100, and 200.
+
+```json
+{
+    "Action": "EditData",
+    "Target": "sophie.Calcifer/StatMilestones",
+    "Entries": {
+        "sophie.ExampleMod_FishCaughtMilestones": {
+            "Stat": "fishCaught",
+            "Milestones": [ 50, 100, 200 ]
+        }
+    }
+}
+```
+
+When the trigger is fired, you can use the special query `sophie.Calcifer/CurrentStatMilestone <stat key> <milestone number>` to check the current stat and milestone being hit. **This query will not work in any circumstances other than the StatMilestoneReached trigger.**
+
+For example, the following set of patches sends the player a piece of mail on the following day once they reach 500 items cooked:
+
+```json
+{
+    "Action": "EditData",
+    "Target": "sophie.Calcifer/StatMilestones",
+    "Entries": {
+        "sophie.ExampleMod_ItemsCookedMilestones": {
+            "Stat": "itemsCooked",
+            "Milestones": [ 500 ]
+        }
+    }
+},
+{
+    "Action": "EditData",
+    "Target": "Data/TriggerActions",
+    "Entries": {
+        "sophie.ExampleMod_500ItemsCooked": {
+            "Id": "sophie.ExampleMod_500ItemsCooked",
+            "Trigger": "sophie.Calcifer/StatMilestoneReached",
+            "Condition": "sophie.Calcifer/CurrentStatMilestone itemsCooked 500",
+            "Action": "AddMail Current sophie.ExampleMod_MasterChef"
+        }
+    }
+}
+```

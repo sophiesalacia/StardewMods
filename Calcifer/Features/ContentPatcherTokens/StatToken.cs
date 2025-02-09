@@ -61,7 +61,7 @@ internal class StatToken
         if (CachedStats.Values.Count != newStats.Values.Count || !CachedStats.Values.Keys.Any(key => !newStats.Values.ContainsKey(key) || newStats.Values[key] != CachedStats.Values[key]))
         {
             hasChanged = true;
-            CachedStats.Values = new SerializableDictionaryWithCaseInsensitiveKeys<uint>(newStats.Values);
+            CachedStats.Values = new SerializableDictionaryWithCaseInsensitiveKeys<uint>(newStats.Values) as StatsDictionary<uint>;
         }
 
         return hasChanged;
