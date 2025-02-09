@@ -125,14 +125,7 @@ class StatMilestoneHooks
     private static void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
     {
         if (e.NameWithoutLocale.IsEquivalentTo(MilestonesAssetString))
-            e.LoadFrom(() => new Dictionary<string, StatMilestones>()
-            {
-                ["Test"] = new StatMilestones()
-                {
-                    Stat = "stepsTaken",
-                    Milestones = [ 50u, 100u, 200u ]
-                }
-            }, AssetLoadPriority.Low);
+            e.LoadFrom(() => new Dictionary<string, StatMilestones>(), AssetLoadPriority.Low);
     }
 }
 
