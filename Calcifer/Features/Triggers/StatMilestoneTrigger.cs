@@ -18,21 +18,11 @@ class StatMilestonePatches
     private static Dictionary<string, StatMilestones>? _statMilestonesAsset;
     internal static Dictionary<string, StatMilestones> StatMilestonesAsset
     {
-        get
-        {
-            _statMilestonesAsset ??= Globals.GameContent.Load<Dictionary<string, StatMilestones>>(MilestonesAssetString);
-            UpdateStatsToCheck();
-            return _statMilestonesAsset;
-
-        }
-        set
-        {
-            _statMilestonesAsset = value;
-            UpdateStatsToCheck();
-        }
+        get => _statMilestonesAsset ??= Globals.GameContent.Load<Dictionary<string, StatMilestones>>(MilestonesAssetString);
+        set => _statMilestonesAsset = value;
     }
 
-    private static void UpdateStatsToCheck()
+    internal static void UpdateStatsToCheck()
     {
         StatsToCheck.Clear();
 
@@ -51,6 +41,11 @@ class StatMilestonePatches
     [HarmonyPostfix]
     public static void Stats_Set_Postfix(Stats __instance, string key)
     {
+        if (!StatsToCheck.Any())
+        {
+            UpdateStatsToCheck();
+        }
+
         if (!StatsToCheck.Contains(key))
             return;
 
@@ -117,6 +112,7 @@ class StatMilestoneHooks
             return;
 
         StatMilestonePatches.StatMilestonesAsset = Game1.content.Load<Dictionary<string, StatMilestones>>(MilestonesAssetString);
+        StatMilestonePatches.UpdateStatsToCheck();
     }
 
     private static void OnAssetReady(object? sender, AssetReadyEventArgs e)
@@ -125,6 +121,7 @@ class StatMilestoneHooks
             return;
 
         StatMilestonePatches.StatMilestonesAsset = Game1.content.Load<Dictionary<string, StatMilestones>>(MilestonesAssetString);
+        StatMilestonePatches.UpdateStatsToCheck();
     }
 
     private static void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
