@@ -64,6 +64,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SophieShared", "SophieShare
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eavesdrop", "Eavesdrop\Eavesdrop.csproj", "{EE0BF307-28CF-49E6-97AD-0C18E917398A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DontGiveMeGarbage", "DontGiveMeGarbage\DontGiveMeGarbage.csproj", "{CF1B38E9-735A-4AD6-9B40-FF533EBC83CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -170,6 +172,10 @@ Global
 		{EE0BF307-28CF-49E6-97AD-0C18E917398A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE0BF307-28CF-49E6-97AD-0C18E917398A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE0BF307-28CF-49E6-97AD-0C18E917398A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF1B38E9-735A-4AD6-9B40-FF533EBC83CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF1B38E9-735A-4AD6-9B40-FF533EBC83CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF1B38E9-735A-4AD6-9B40-FF533EBC83CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF1B38E9-735A-4AD6-9B40-FF533EBC83CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -181,6 +187,7 @@ Global
 		SophieShared\SophieShared.projitems*{2b10c5f6-f3cf-4da8-8120-8decdc83daa9}*SharedItemsImports = 5
 		SophieShared\SophieShared.projitems*{8837daf8-6652-47a1-b453-c3e784a080a5}*SharedItemsImports = 5
 		SophieShared\SophieShared.projitems*{920ae37e-a070-4b2c-b746-56b8ac79b304}*SharedItemsImports = 13
+		SophieShared\SophieShared.projitems*{cf1b38e9-735a-4ad6-9b40-ff533ebc83ce}*SharedItemsImports = 5
 		SophieShared\SophieShared.projitems*{ee0bf307-28cf-49e6-97ad-0c18e917398a}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal

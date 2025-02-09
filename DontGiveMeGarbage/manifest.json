@@ -1,0 +1,27 @@
+{
+  /*
+   | This file is automatically updated by ModManifestBuilder
+   | when the project is compiled.
+   | 
+   | Changes made to this file may be overwritten.
+   | 
+   */
+  "$schema": "https://smapi.io/schemas/manifest.json",
+  "UniqueID": "sophie.DontGiveMeGarbage",
+  "Name": "Don't Give Me Garbage - NPC Trash Reactions",
+  "Author": "sophie",
+  "Version": "0.1.0-Debug",
+  "Description": "Allows NPCs to react to being given items that were taken from the trash.",
+  "MinimumApiVersion": "4.1",
+  "EntryDll": "DontGiveMeGarbage.dll",
+  "Dependencies": [
+    {
+      "UniqueID": "Pathoschild.ContentPatcher",
+      "MinimumVersion": "2.4"
+    }
+  ],
+  "UpdateKeys": [
+    "Nexus:???",
+    "Nexus:31429"
+  ]
+}
