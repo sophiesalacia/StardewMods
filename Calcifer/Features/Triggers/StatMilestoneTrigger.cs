@@ -18,8 +18,13 @@ class StatMilestonePatches
     private static Dictionary<string, StatMilestones>? _statMilestonesAsset;
     internal static Dictionary<string, StatMilestones> StatMilestonesAsset
     {
-        get => _statMilestonesAsset ??=
-            Globals.GameContent.Load<Dictionary<string, StatMilestones>>(MilestonesAssetString);
+        get
+        {
+            _statMilestonesAsset ??= Globals.GameContent.Load<Dictionary<string, StatMilestones>>(MilestonesAssetString);
+            UpdateStatsToCheck();
+            return _statMilestonesAsset;
+
+        }
         set
         {
             _statMilestonesAsset = value;
