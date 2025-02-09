@@ -20,8 +20,24 @@ class StatMilestonePatches
     {
         get => _statMilestonesAsset ??=
             Globals.GameContent.Load<Dictionary<string, StatMilestones>>(MilestonesAssetString);
-        set => _statMilestonesAsset = value;
+        set
+        {
+            _statMilestonesAsset = value;
+            UpdateStatsToCheck();
+        }
     }
+
+    private static void UpdateStatsToCheck()
+    {
+        StatsToCheck.Clear();
+
+        foreach (var kvp in StatMilestonesAsset)
+        {
+            StatsToCheck.Add(kvp.Value.Stat);
+        }
+    }
+
+    internal static HashSet<string> StatsToCheck = [];
 
     internal static string CurrentStat;
     internal static uint Milestone;
@@ -30,6 +46,9 @@ class StatMilestonePatches
     [HarmonyPostfix]
     public static void Stats_Set_Postfix(Stats __instance, string key)
     {
+        if (!StatsToCheck.Contains(key))
+            return;
+
         uint value = __instance.Get(key);
 
         foreach (StatMilestones milestones in StatMilestonesAsset.Where(kvp => kvp.Value.Stat.Equals(key)).Select(kvp => kvp.Value))
@@ -92,7 +111,7 @@ class StatMilestoneHooks
         if (!e.NamesWithoutLocale.Contains(MilestonesAssetName))
             return;
 
-        FurnitureActionPatches.CustomFurnitureActionsAsset = Game1.content.Load<Dictionary<string, FurnitureActionData>>(MilestonesAssetString);
+        StatMilestonePatches.StatMilestonesAsset = Game1.content.Load<Dictionary<string, StatMilestones>>(MilestonesAssetString);
     }
 
     private static void OnAssetReady(object? sender, AssetReadyEventArgs e)
@@ -100,13 +119,20 @@ class StatMilestoneHooks
         if (!e.NameWithoutLocale.IsEquivalentTo(MilestonesAssetString))
             return;
 
-        FurnitureActionPatches.CustomFurnitureActionsAsset = Game1.content.Load<Dictionary<string, FurnitureActionData>>(MilestonesAssetString);
+        StatMilestonePatches.StatMilestonesAsset = Game1.content.Load<Dictionary<string, StatMilestones>>(MilestonesAssetString);
     }
 
     private static void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
     {
         if (e.NameWithoutLocale.IsEquivalentTo(MilestonesAssetString))
-            e.LoadFrom(() => new Dictionary<string, FurnitureActionData>(), AssetLoadPriority.Low);
+            e.LoadFrom(() => new Dictionary<string, StatMilestones>()
+            {
+                ["Test"] = new StatMilestones()
+                {
+                    Stat = "stepsTaken",
+                    Milestones = [ 50u, 100u, 200u ]
+                }
+            }, AssetLoadPriority.Low);
     }
 }
 

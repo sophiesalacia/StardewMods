@@ -12,7 +12,7 @@
   "Author": "sophie",
   "Version": "0.1.0-Debug",
   "Description": "Core mod by sophie.",
-  "MinimumApiVersion": "4.0",
+  "MinimumApiVersion": "4.1",
   "EntryDll": "Calcifer.dll",
   "Dependencies": [
     {
