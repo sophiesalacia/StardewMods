@@ -285,7 +285,7 @@ The following example sets milestones for the stat "fishCaught" at 50, 100, and 
 }
 ```
 
-When the trigger is fired, you can use the special query `sophie.Calcifer/CurrentStatMilestone <stat key> <milestone number>` to check the current stat and milestone being hit. **This query will not work in any circumstances other than the StatMilestoneReached trigger.**
+When the trigger is fired, you can use the special query `sophie.Calcifer/CurrentStatMilestone <stat key> [milestone number]` to check the current stat and milestone being hit. The milestone number is optional, if not specified the query will match every time a milestone is hit for that stat. **This query will not work in any circumstances other than the StatMilestoneReached trigger.**
 
 For example, the following set of patches sends the player a piece of mail on the following day once they reach 500 items cooked, by first defining the milestone and then the corresponding trigger action:
 

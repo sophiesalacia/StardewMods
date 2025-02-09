@@ -93,12 +93,12 @@ class StatMilestoneHooks
             GameStateQuery.Helpers.ErrorResult(query, $"Failed to parse stat key from provided query: {error}");
         }
 
-        if (!ArgUtility.TryGetInt(query, 2, out int milestone, out error, "milestone value"))
+        if (!ArgUtility.TryGetOptionalInt(query, 2, out int milestone, out error, -1, "milestone value"))
         {
             GameStateQuery.Helpers.ErrorResult(query, $"Failed to parse milestone value from provided query: {error}");
         }
 
-        return StatMilestonePatches.CurrentStat.Equals(stat) && StatMilestonePatches.Milestone.Equals((uint) milestone);
+        return StatMilestonePatches.CurrentStat.Equals(stat) && (milestone < 0 || StatMilestonePatches.Milestone.Equals((uint) milestone));
     }
 
     private static void RegisterTriggers(object? sender, GameLaunchedEventArgs e)
