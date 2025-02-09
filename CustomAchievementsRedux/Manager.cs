@@ -117,7 +117,6 @@ public class Manager
         }
     }
 
-
     private static bool TryLoadTexture(string achievementId, string textureName, out Texture2D? texture)
     {
         try
