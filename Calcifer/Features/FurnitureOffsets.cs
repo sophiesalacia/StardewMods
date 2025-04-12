@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Calcifer.EventHooks;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StardewModdingAPI;
 using StardewModdingAPI.Events;
-using StardewValley;
 using StardewValley.ItemTypeDefinitions;
 using StardewValley.Objects;
 using SObject = StardewValley.Object;

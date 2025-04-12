@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using Calcifer.EventHooks;
 using HarmonyLib;
 using StardewModdingAPI.Events;
 using StardewValley.GameData.Objects;

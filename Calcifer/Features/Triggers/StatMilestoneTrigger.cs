@@ -1,12 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using Calcifer.EventHooks;
 using HarmonyLib;
 using StardewModdingAPI.Events;
 using StardewValley.Delegates;
-using StardewValley.Minigames;
 using StardewValley.Triggers;
-using SObject = StardewValley.Object;
 // ReSharper disable InconsistentNaming
 
 namespace Calcifer.Features.Triggers;
@@ -26,15 +24,15 @@ class StatMilestonePatches
     {
         StatsToCheck.Clear();
 
-        foreach (var kvp in StatMilestonesAsset)
+        foreach ((string _, StatMilestones? milestone) in StatMilestonesAsset)
         {
-            StatsToCheck.Add(kvp.Value.Stat);
+            StatsToCheck.Add(milestone.Stat);
         }
     }
 
     internal static HashSet<string> StatsToCheck = [];
 
-    internal static string CurrentStat;
+    internal static string CurrentStat = "";
     internal static uint Milestone;
 
     [HarmonyPatch(typeof(Stats), nameof(Stats.Set), typeof(string), typeof(uint))]

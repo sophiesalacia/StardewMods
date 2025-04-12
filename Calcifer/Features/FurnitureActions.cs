@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Calcifer.EventHooks;
 using HarmonyLib;
-using StardewModdingAPI;
 using StardewModdingAPI.Events;
-using StardewValley;
 using StardewValley.Objects;
 using StardewValley.Triggers;
 using xTile.Dimensions;

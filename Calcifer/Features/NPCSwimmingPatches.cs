@@ -5,7 +5,6 @@
 // ReSharper disable UnusedMember.Global
 
 using HarmonyLib;
-using StardewValley;
 
 namespace Calcifer.Features;
 

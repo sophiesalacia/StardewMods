@@ -1,3 +1,4 @@
+using Calcifer.EventHooks;
 using HarmonyLib;
 using StardewModdingAPI.Events;
 using StardewValley.Triggers;

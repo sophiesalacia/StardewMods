@@ -14,7 +14,7 @@ internal static class EventHookHandler
 
         try
         {
-		    List<Type> types = new StackTrace().GetFrame(1)?.GetMethod()?.ReflectedType?.Assembly.GetTypes().ToList() ?? new List<Type>();
+		    List<Type> types = new StackTrace().GetFrame(1)?.GetMethod()?.ReflectedType?.Assembly.GetTypes().ToList() ?? [];
 
             // priority is ordered low to high
             foreach (Type t in types.Where(t => t.GetCustomAttribute<HasEventHooksAttribute>() is not null).OrderBy(type => type.GetCustomAttribute<HasEventHooksAttribute>()!.Priority))

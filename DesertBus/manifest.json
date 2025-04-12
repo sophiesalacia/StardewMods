@@ -1,0 +1,27 @@
+{
+  /*
+   | This file is automatically updated by ModManifestBuilder
+   | when the project is compiled.
+   | 
+   | Changes made to this file may be overwritten.
+   | 
+   */
+  "$schema": "https://smapi.io/schemas/manifest.json",
+  "UniqueID": "sophie.DesertBus",
+  "Name": "Desert Bus",
+  "Author": "sophie",
+  "Version": "0.1.0-Debug",
+  "Description": "Very serious mod for serious public transit enjoyers.",
+  "MinimumApiVersion": "4.1",
+  "EntryDll": "DesertBus.dll",
+  "Dependencies": [
+    {
+      "UniqueID": "Pathoschild.ContentPatcher",
+      "MinimumVersion": "2.5"
+    }
+  ],
+  "UpdateKeys": [
+    "Nexus:-1",
+    "Nexus:31429"
+  ]
+}
