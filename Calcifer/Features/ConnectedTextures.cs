@@ -1,0 +1,558 @@
+// This code is hereby released into the public domain
+// attribution is appreciated but not required.
+//
+// Based on ConnectedTextures.cs by tlitookilakin https://gist.github.com/tlitookilakin/a1a8d6d8fd9b894578d13f9c56bf9338
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using StardewModdingAPI.Events;
+using StardewValley.Objects;
+
+namespace Calcifer.Features;
+
+/// <summary>
+/// Connected Textures
+/// Supported:
+/// - Most placable objects and big craftables, as long as they obey ParentSheetIndex
+/// - Most furniture
+/// Not supported
+/// - Rotations
+/// - Fish Tank (fishtank)
+/// - Bed (bed\w+)
+/// - Free Cactuses (randomized_plant)
+/// - Bigger Craftables
+/// - Furniture via Furniture Framework
+/// </summary>
+[HasEventHooks]
+class ConnectedTextures
+{
+    /// APPLY TEXTURES
+
+    /// This is used to track what objects/furniture have gotten change, since the asset sophie.Calcifer/ConnectedTextures could potentially change between checks
+    public const string ConnectedTextureApplied = "sophie.Calcifer/ConnectedTextures.Applied";
+
+    private static readonly MethodInfo? Furniture_isLampStyleLightSourceMethod = typeof(Furniture).GetMethod("isLampStyleLightSource", BindingFlags.NonPublic | BindingFlags.Instance);
+
+    private static bool Furniture_isLampStyleLightSource(Furniture furniture)
+    {
+        return (bool)(Furniture_isLampStyleLightSourceMethod?.Invoke(furniture, []) ?? false);
+    }
+
+    /// Use various events to modify sprite index as needed
+    internal static void InitHooks()
+    {
+        Globals.EventHelper.Content.AssetRequested += OnAssetRequested;
+        Globals.EventHelper.Content.AssetsInvalidated += OnAssetInvalidated;
+
+        Globals.EventHelper.GameLoop.Saving += PreSaveReset;
+        Globals.EventHelper.GameLoop.Saved += PostSaveSetup;
+        Globals.EventHelper.GameLoop.SaveLoaded += PostSaveSetup;
+
+        Globals.EventHelper.Player.Warped += OnWarped;
+        Globals.EventHelper.World.ObjectListChanged += OnObjectListChanged;
+        // World.FurnitureListChanged gives inaccorate TileLocation of the removed furniture
+        // Need to use where.furniture.OnValueAdded/OnValueRemoved instead
+    }
+
+    /// <summary>Location change handling</summary>
+    private static void OnWarped(object? sender, WarpedEventArgs e)
+    {
+        LocationTeardown(e.OldLocation);
+        LocationSetup(e.NewLocation);
+    }
+
+    /// <summary>Reset all connected textures before save</summary>
+    private static void PreSaveReset(object? sender, SavingEventArgs e)
+    {
+        LocationTeardown(Game1.currentLocation);
+        // do not allow modified sprite index/source rect go into the save
+        Utility.ForEachLocation(
+            where =>
+            {
+                foreach (StardewValley.Object obj in where.Objects.Values)
+                {
+                    Object_ResetParentSheetIndex(obj);
+                }
+                foreach (Furniture furniture in where.furniture)
+                {
+                    Furniture_ResetSourceRect(furniture);
+                }
+                return true;
+            }
+        );
+    }
+
+    /// <summary>Setup after saving</summary>
+    private static void PostSaveSetup(object? sender, EventArgs e)
+    {
+        LocationSetup(Game1.currentLocation, true);
+    }
+
+    /// <summary>Setup connected textures in new location (as needed) and furniture add/remove handling</summary>
+    private static void LocationSetup(GameLocation? where, bool forceCheck = false)
+    {
+        if (where == null)
+            return;
+        foreach ((Vector2 tile, StardewValley.Object obj) in where.Objects.Pairs)
+        {
+            Object_UpdateParentSheetIndex(where, tile, obj, forceCheck: forceCheck);
+        }
+        foreach (Furniture furniture in where.furniture)
+        {
+            Furniture_UpdateSourceRect(where, furniture, forceCheck: forceCheck);
+        }
+
+        where.furniture.OnValueAdded += OnFurnitureAdded;
+        where.furniture.OnValueRemoved += OnFurnitureRemoved;
+    }
+
+    /// <summary>Remove furniture add/remove handling</summary>
+    private static void LocationTeardown(GameLocation? where)
+    {
+        if (where == null)
+            return;
+        where.furniture.OnValueAdded -= OnFurnitureAdded;
+        where.furniture.OnValueRemoved -= OnFurnitureRemoved;
+    }
+
+    /// <summary>Furniture tile bounds</summary>
+    public static Rectangle FurnitureTileBounds(Furniture furniture)
+    {
+        return new Rectangle(
+            (int)furniture.TileLocation.X,
+            (int)furniture.TileLocation.Y,
+            furniture.getTilesWide(),
+            furniture.getTilesHigh()
+        );
+    }
+
+    /// <summary>
+    // Assert the furniture is both the neigbour and grid aligned for purpose of connection check.
+    // 1x1 is always aligned
+    // For bigger sizes, this is true if the items have the same size, and the difference in X/Y modulos to zero
+    // Practically speaking it checks against these kinds of arrangement:
+    // AA-  ABB
+    // -BB  A--
+    // And allow these kinds
+    // AA   AA--
+    // BB   --BB
+    // </summary>
+    public static bool FurnitureContainsAndAligned(Furniture furniture, Vector2 neighbourTile, Rectangle bounds)
+    {
+        Rectangle neighbourBounds = FurnitureTileBounds(furniture);
+        if (!neighbourBounds.Contains(neighbourTile))
+            return false;
+        if (neighbourBounds.Width != bounds.Width || neighbourBounds.Height != bounds.Height)
+            return false;
+        if ((neighbourBounds.X - bounds.X) % bounds.Width != 0)
+            return false;
+        if ((neighbourBounds.Y - bounds.Y) % bounds.Height != 0)
+            return false;
+        return true;
+    }
+
+    /// <summary>Update neighbour object/furnitures</summary>
+    private static void UpdateNeighbours(GameLocation where, Rectangle bounds)
+    {
+        foreach (Vector2 neighbourTile in Neighbour_All(bounds))
+        {
+            if (where.objects.TryGetValue(neighbourTile, out StardewValley.Object neighbourObj))
+            {
+                Object_UpdateParentSheetIndex(where, neighbourTile, neighbourObj, true);
+            }
+            if (where.furniture.FirstOrDefault(f => FurnitureContainsAndAligned(f, neighbourTile, bounds)) is Furniture neighbourFurniture)
+            {
+                Furniture_UpdateSourceRect(where, neighbourFurniture, true);
+            }
+        }
+    }
+
+    // APPLY TEXTURES: OBJECTS
+
+    /// <summary>Update neighbour objects</summary>
+    private static void OnObjectListChanged(object? sender, ObjectListChangedEventArgs e)
+    {
+        if (!e.IsCurrentLocation)
+            return;
+
+        HashSet<Rectangle> needNeighbourUpdate = [];
+        foreach ((Vector2 tile, StardewValley.Object obj) in e.Removed)
+        {
+            Object_ResetParentSheetIndex(obj);
+            needNeighbourUpdate.Add(new((int)tile.X, (int)tile.Y, 1, 1));
+        }
+        foreach ((Vector2 tile, StardewValley.Object obj) in e.Added)
+        {
+            Object_UpdateParentSheetIndex(e.Location, tile, obj, forceCheck: true);
+            needNeighbourUpdate.Add(new((int)tile.X, (int)tile.Y, 1, 1));
+        }
+        foreach (Rectangle rect in needNeighbourUpdate)
+        {
+            UpdateNeighbours(e.Location, rect);
+        }
+    }
+
+    /// <summary>Reset the object to original index if it had been changed by this</summary>
+    private static void Object_ResetParentSheetIndex(StardewValley.Object obj)
+    {
+        if (obj.modData.ContainsKey(ConnectedTextureApplied))
+        {
+            obj.ResetParentSheetIndex();
+            obj.modData.Remove(ConnectedTextureApplied);
+        }
+    }
+
+    /// <summary>Update the object's index based on offset, mark object as changed</summary>
+    private static void Object_UpdateParentSheetIndex(GameLocation where, Vector2 tile, StardewValley.Object obj, bool forceCheck = false)
+    {
+        if (!forceCheck && obj.modData.ContainsKey(ConnectedTextureApplied))
+            return;
+        if (!Data.TryGetValue(obj.QualifiedItemId, out ConnectedTextureData? connectedTextureData))
+            return;
+        int offset = CalculateOffset(where, new Rectangle((int)tile.X, (int)tile.Y, 1, 1), connectedTextureData);
+        Object_ResetParentSheetIndex(obj);
+        if (offset == 0)
+            return;
+        obj.modData[ConnectedTextureApplied] = "T";
+        obj.ParentSheetIndex += offset;
+    }
+
+    // APPLY TEXTURES: FURNITURE
+
+    /// <summary>Update placed furniture and neighbours</summary>
+    private static void OnFurnitureAdded(Furniture furniture)
+    {
+        Furniture_UpdateSourceRect(Game1.currentLocation, furniture, true);
+        UpdateNeighbours(Game1.currentLocation, FurnitureTileBounds(furniture));
+    }
+
+    /// <summary>Reset removed furniture and neighbours</summary>
+    private static void OnFurnitureRemoved(Furniture furniture)
+    {
+        Furniture_ResetSourceRect(furniture);
+        UpdateNeighbours(Game1.currentLocation, FurnitureTileBounds(furniture));
+    }
+
+    /// <summary>Reset furniture source rect to default</summary>
+    private static void Furniture_ResetSourceRect(Furniture furniture)
+    {
+        if (furniture.modData.ContainsKey(ConnectedTextureApplied))
+        {
+            furniture.sourceRect.Value = Furniture.GetDefaultSourceRect(furniture.ItemId);
+            furniture.defaultSourceRect.Value = furniture.sourceRect.Value;
+            furniture.updateRotation();
+            furniture.modData.Remove(ConnectedTextureApplied);
+        }
+    }
+
+    /// <summary>Update furniture source rect</summary>
+    private static void Furniture_UpdateSourceRect(GameLocation where, Furniture furniture, bool forceCheck = false)
+    {
+        if (!forceCheck && furniture.modData.ContainsKey(ConnectedTextureApplied))
+            return;
+        // TODO implement support for these
+        if (furniture.rotations.Value > 0 || furniture is FishTankFurniture || furniture is RandomizedPlantFurniture || furniture is BedFurniture)
+            return;
+
+        if (!Data.TryGetValue(furniture.QualifiedItemId, out ConnectedTextureData? connectedTextureData))
+            return;
+        int offset = CalculateOffset(where, new((int)furniture.TileLocation.X, (int)furniture.TileLocation.Y, furniture.getTilesWide(), furniture.getTilesHigh()), connectedTextureData);
+        Furniture_ResetSourceRect(furniture);
+        if (offset == 0)
+            return;
+
+        Texture2D texture = ItemRegistry.GetDataOrErrorItem(furniture.QualifiedItemId).GetTexture();
+        Rectangle defaultSourceRect = furniture.defaultSourceRect.Value;
+        int rectWidth = defaultSourceRect.Width;
+        // HARDCODING: windows & lamps may have sourceIndexOffset.Value=1 which means twice as much width considered for
+        if (furniture.furniture_type.Value == Furniture.window || Furniture_isLampStyleLightSource(furniture))
+        {
+            rectWidth += defaultSourceRect.Width;
+        }
+        int newX = defaultSourceRect.X;
+        int newY = defaultSourceRect.Y;
+        for (int i = offset; i > 0; i--)
+        {
+            newX += rectWidth;
+            if (newX >= texture.Width)
+            {
+                newX = 0;
+                newY += defaultSourceRect.Height;
+            }
+        }
+        furniture.defaultSourceRect.Value = new(newX, newY, defaultSourceRect.Width, defaultSourceRect.Height);
+        furniture.sourceRect.Value = furniture.defaultSourceRect.Value;
+        furniture.modData[ConnectedTextureApplied] = "T";
+    }
+
+    /// DATA & CONNECTIONS
+    public const string ConnectedTextureDataString = "sophie.Calcifer/ConnectedTextures";
+
+    public static Dictionary<string, ConnectedTextureData> Data
+        => _data ??= Globals.GameContent.Load<Dictionary<string, ConnectedTextureData>>(ConnectedTextureDataString);
+    private static Dictionary<string, ConnectedTextureData>? _data;
+
+    private static void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
+    {
+        if (e.NameWithoutLocale.IsEquivalentTo(ConnectedTextureDataString))
+        {
+            e.LoadFrom(() => new Dictionary<string, ConnectedTextureData>(), AssetLoadPriority.Exclusive);
+        }
+    }
+
+    private static void OnAssetInvalidated(object? sender, AssetsInvalidatedEventArgs e)
+    {
+        if (e.NamesWithoutLocale.Any(assetName => assetName.IsEquivalentTo(ConnectedTextureDataString)))
+        {
+            _data = null;
+        }
+    }
+
+    private static IEnumerable<Vector2> Neighbour_All(Rectangle bounds)
+    {
+        for (int i = bounds.X - 1; i <= bounds.Right; i++)
+        {
+            for (int j = bounds.Y - 1; j <= bounds.Bottom; j++)
+            {
+                Vector2 neighbourTile = new(i, j);
+                if (!bounds.Contains(neighbourTile))
+                    yield return neighbourTile;
+            }
+        }
+    }
+
+    /// <summary>Get right side neighbours</summary>
+    /// <param name="bounds"></param>
+    /// <returns></returns>
+    private static IEnumerable<Vector2> Neighbour_Right(Rectangle bounds)
+    {
+        for (int i = bounds.Y; i < bounds.Bottom; i++)
+            yield return new(bounds.X + bounds.Width, i);
+    }
+
+    /// <summary>Get left side neighbours</summary>
+    /// <param name="bounds"></param>
+    /// <returns></returns>
+    private static IEnumerable<Vector2> Neighbour_Left(Rectangle bounds)
+    {
+        for (int i = bounds.Y; i < bounds.Bottom; i++)
+            yield return new(bounds.X - 1, i);
+    }
+
+    /// <summary>Get up side neighbours</summary>
+    /// <param name="bounds"></param>
+    /// <returns></returns>
+    private static IEnumerable<Vector2> Neighbour_Up(Rectangle bounds)
+    {
+        for (int i = bounds.X; i < bounds.Right; i++)
+            yield return new(i, bounds.Y - 1);
+    }
+
+    /// <summary>Get up side neighbours</summary>
+    /// <param name="bounds"></param>
+    /// <returns></returns>
+    private static IEnumerable<Vector2> Neighbour_Down(Rectangle bounds)
+    {
+        // up
+        for (int i = bounds.X; i < bounds.Right; i++)
+            yield return new(i, bounds.Y + bounds.Height);
+    }
+
+    /// <summary>Determines the connection style to use.</summary>
+    public enum ConnectionStyle
+    {
+        /// <summary>No connected textures. 1 sprite</summary>
+        None,
+        /// <summary>Connects to the top and bottom. 4 sprites</summary>
+        Vertical,
+        /// <summary>Connects to the left and right. 4 sprites</summary>
+        Horizontal,
+        /// <summary>Connects to the sides. 16 sprites</summary>
+        Simple,
+        /// <summary>Connects to the sides and corners. 47 sprites</summary>
+        Full
+    }
+
+    /// <summary>Generates a tile index offset based on nearby tiles</summary>
+    /// <param name="where">The location the object is in</param>
+    /// <param name="tile">The tile position</param>
+    /// <param name="connections">The types of connections it should use</param>
+    /// <param name="style">Connection pattern</param>
+    /// <returns>The sprite index offset to use</returns>
+    public static int CalculateOffset(GameLocation where, Rectangle bounds, ConnectedTextureData connectedTextureData)
+    {
+        if (where is null || connectedTextureData.ConnectWith is not IList<string> connections)
+            return 0;
+
+        return connectedTextureData.Style switch
+        {
+            ConnectionStyle.None => 0,
+            ConnectionStyle.Vertical => VerticalOffset(where, bounds, connections),
+            ConnectionStyle.Horizontal => HorizontalOffset(where, bounds, connections),
+            ConnectionStyle.Simple => SimpleOffset(where, bounds, connections),
+            ConnectionStyle.Full => FullOffset(where, bounds, connections),
+            _ => 0
+        };
+    }
+
+    /// <returns>True if this tile has any of the listed connections, otherwise false.</returns>
+    private static bool ConnectsToTile(GameLocation where, Vector2 tile, Rectangle bounds, IList<string> connections)
+    {
+        // objects, fences, and bigcraftables
+        if (where.Objects.TryGetValue(tile, out var obj) && Connects(obj.QualifiedItemId, connections))
+            return true;
+
+        // furniture
+        if (where.furniture.FirstOrDefault(f => FurnitureContainsAndAligned(f, tile, bounds)) is Furniture furniture && Connects(furniture.QualifiedItemId, connections))
+            return true;
+
+        return false;
+    }
+
+    private static bool Connects(string id, IList<string> connections)
+    {
+        if (connections.Contains(id))
+            return true;
+
+        if (!Data.TryGetValue(id, out var data) || data.ConnectWith is null)
+            return false;
+
+        foreach (string type in data.ConnectWith)
+            if (connections.Contains(type))
+                return true;
+
+        return false;
+    }
+
+    private static readonly int[] RequiresCornerCheck = [
+        // corners
+        0b0011, 0b0110, 0b1100, 0b1001,
+        // 3-ways
+        0b0111, 0b1110, 0b1101, 0b1011,
+        // 4-way
+        0b1111
+    ];
+
+    // 2-3
+    // ---
+    // 1-0
+    private static readonly int[][] CornersToCheck = [
+        // corners
+        [0],[1],[2],[3],
+        // 3-ways
+        [0, 1], [1, 2], [2, 3], [3, 0],
+        // 4-way
+        [0, 1, 2, 3],
+    ];
+
+    private static Vector2[] CornerCoords(Rectangle bounds)
+    {
+        return [
+            new(bounds.Right, bounds.Bottom),
+            new(bounds.Left-1, bounds.Bottom),
+            new(bounds.Left-1, bounds.Top-1),
+            new(bounds.Right, bounds.Top-1)
+        ];
+    }
+
+    private static int FullOffset(GameLocation where, Rectangle bounds, IList<string> connections)
+    {
+        // get an initial simple offset. if it's not one that supports inside corners, return as-is
+        int offset = SimpleOffset(where, bounds, connections);
+        int checkCorner = Array.IndexOf(RequiresCornerCheck, offset);
+        if (checkCorner is -1)
+            return offset;
+
+        // generate a bitmask based on the relevant corners.
+        // this is 1-bit for the corners (first 4), 2-bit for the 3-ways (second 4), and 4-bit for the 4-way (last)
+        Vector2[] cornerCoords = CornerCoords(bounds);
+        int corners = 0;
+        int[] checks = CornersToCheck[checkCorner];
+        for (int i = 0; i < checks.Length; i++)
+            corners |= ConnectsToTile(where, cornerCoords[checks[i]], bounds, connections) ? (1 << i) : 0;
+
+        // if no corners exist, use the default index
+        if (corners is 0)
+            return offset;
+
+        int block = 0;
+        int unitSize = 0;
+
+        // simple offset size is 4 bits, with a max value of 15. 16 is 0th index after
+        // unitsize is defined by bit count (see above)
+        // block is defined by the offsets of previous groups, plus the number of units multiplied by the unit size
+        switch (checkCorner / 4)
+        {
+            case 0: // corners
+                block = 16;
+                unitSize = 1;
+                break;
+            case 1: // 3-ways
+                block = 16 + (4 * 1);
+                unitSize = 3;
+                break;
+            case 2: // 4-way
+                block = 16 + (4 * 1) + (4 * 3);
+                unitSize = 15;
+                break;
+        }
+
+        // unit index + block index + variant index
+        return (checkCorner % 4) * unitSize + block + (corners - 1);
+    }
+
+    /// <summary>Generates a 4-bit bitmask from the 4 cardinal tiles (sides)</summary>
+    private static int SimpleOffset(GameLocation where, Rectangle bounds, IList<string> connections)
+    {
+        int offset = 0;
+        offset |= NeighbourOffsetCheck(where, bounds, connections, Neighbour_Right(bounds), 1 << 0);
+        offset |= NeighbourOffsetCheck(where, bounds, connections, Neighbour_Down(bounds), 1 << 1);
+        offset |= NeighbourOffsetCheck(where, bounds, connections, Neighbour_Left(bounds), 1 << 2);
+        offset |= NeighbourOffsetCheck(where, bounds, connections, Neighbour_Up(bounds), 1 << 3);
+        return offset;
+    }
+
+    /// <summary>Generates a 2-bit bitmask from horizontal (right/left) offset</summary>
+    private static int HorizontalOffset(GameLocation where, Rectangle bounds, IList<string> connections)
+    {
+        int offset = 0;
+        offset |= NeighbourOffsetCheck(where, bounds, connections, Neighbour_Right(bounds), 1);
+        offset |= NeighbourOffsetCheck(where, bounds, connections, Neighbour_Left(bounds), 2);
+        return offset;
+    }
+
+    /// <summary>Generates a 2-bit bitmask from vertical (down/up) offset</summary>
+    private static int VerticalOffset(GameLocation where, Rectangle bounds, IList<string> connections)
+    {
+        int offset = 0;
+        offset |= NeighbourOffsetCheck(where, bounds, connections, Neighbour_Down(bounds), 1);
+        offset |= NeighbourOffsetCheck(where, bounds, connections, Neighbour_Up(bounds), 2);
+        return offset;
+    }
+
+    /// <summary>Get right side neighbours</summary>
+    /// <param name="bounds"></param>
+    /// <returns></returns>
+    private static int NeighbourOffsetCheck(GameLocation where, Rectangle bounds, IList<string> connections, IEnumerable<Vector2> neighbours, int directionalValue)
+    {
+        foreach (Vector2 neighbour in neighbours)
+        {
+            if (ConnectsToTile(where, neighbour, bounds, connections))
+            {
+                return directionalValue;
+            }
+        }
+        return 0;
+    }
+
+
+    public record class ConnectedTextureData
+    {
+        public ConnectionStyle Style { get; set; }
+        public List<string>? ConnectWith { get; set; }
+    }
+}
