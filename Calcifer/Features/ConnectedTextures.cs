@@ -254,7 +254,7 @@ class ConnectedTextures
     {
         if (!forceCheck && furniture.modData.ContainsKey(ConnectedTextureApplied))
             return;
-        // TODO implement support for these
+        // TODO: implement support for these?
         if (furniture.rotations.Value > 0 || furniture is FishTankFurniture || furniture is RandomizedPlantFurniture || furniture is BedFurniture)
             return;
 

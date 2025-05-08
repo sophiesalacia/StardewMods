@@ -1,0 +1,82 @@
+{
+  "$schema": "https://smapi.io/schemas/content-patcher.json",
+  "Changes": [
+    {
+      "Action": "EditData",
+      "Target": "Data/BigCraftables",
+      "Entries": {
+        "{{ModId}}_vertical": {
+          "Name": "{{ModId}}_vertical",
+          "DisplayName": "{{ModId}}_vertical",
+          "Price": 50,
+          "Fragility": 0,
+          "CanBePlacedOutdoors": true,
+          "CanBePlacedIndoors": true,
+          "Texture": "{{ModId}}/vertical",
+          "SpriteIndex": 0
+        },
+        "{{ModId}}_horizontal": {
+          "Name": "{{ModId}}_horizontal",
+          "DisplayName": "{{ModId}}_horizontal",
+          "Price": 50,
+          "Fragility": 0,
+          "CanBePlacedOutdoors": true,
+          "CanBePlacedIndoors": true,
+          "Texture": "{{ModId}}/horizontal",
+          "SpriteIndex": 0
+        },
+        "{{ModId}}_horizontal2": {
+          "Name": "{{ModId}}_horizontal2",
+          "DisplayName": "{{ModId}}_horizontal2",
+          "Price": 50,
+          "Fragility": 0,
+          "CanBePlacedOutdoors": true,
+          "CanBePlacedIndoors": true,
+          "Texture": "{{ModId}}/horizontal2",
+          "SpriteIndex": 0
+        },
+        "{{ModId}}_simple": {
+          "Name": "{{ModId}}_simple",
+          "DisplayName": "{{ModId}}_simple",
+          "Price": 50,
+          "Fragility": 0,
+          "CanBePlacedOutdoors": true,
+          "CanBePlacedIndoors": true,
+          "Texture": "{{ModId}}/simple",
+          "SpriteIndex": 0
+        }
+      }
+    },
+    // Dictionary<string, ConnectedTextureData>
+    {
+      "Action": "EditData",
+      "Target": "sophie.Calcifer/ConnectedTextures",
+      "Entries": {
+        "(BC){{ModId}}_vertical": {
+          "Style": "Vertical",
+          "ConnectWith": [
+            "(BC){{ModId}}_vertical"
+          ]
+        },
+        "(BC){{ModId}}_horizontal": {
+          "Style": "Horizontal",
+          "ConnectWith": [
+            "(BC){{ModId}}_horizontal2"
+          ]
+        },
+        "(BC){{ModId}}_horizontal2": {
+          "Style": "Horizontal",
+          "ConnectWith": [
+            "(BC){{ModId}}_horizontal"
+          ]
+        },
+        "(BC){{ModId}}_simple": {
+          "Style": "Simple",
+          "ConnectWith": [
+            "(BC){{ModId}}_simple"
+          ]
+        }
+      }
+    },
+  ]
+}
