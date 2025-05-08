@@ -1,0 +1,122 @@
+{
+  "$schema": "https://smapi.io/schemas/content-patcher.json",
+  "Changes": [
+    {
+      "Action": "EditData",
+      "Target": "Data/Furniture",
+      "Entries": {
+        "{{ModId}}_vertical": "{{ModId}}_vertical/table/1 2/1 1/2/999/-1/{{ModId}}_vertical/0/{{ModId}}\\vertical",
+        "{{ModId}}_horizontal": "{{ModId}}_horizontal/table/1 2/1 1/2/999/-1/{{ModId}}_horizontal/0/{{ModId}}\\horizontal",
+        "{{ModId}}_horizontal2": "{{ModId}}_horizontal2/table/1 2/1 1/2/999/-1/{{ModId}}_horizontal2/0/{{ModId}}\\horizontal2",
+        "{{ModId}}_simple": "{{ModId}}_simple/table/1 2/1 1/2/999/-1/{{ModId}}_simple/0/{{ModId}}\\simple",
+        "{{ModId}}_simple2": "{{ModId}}_simple2/table/1 2/1 1/2/999/-1/{{ModId}}_simple2/0/{{ModId}}\\simple2",
+        "{{ModId}}_full": "{{ModId}}_full/table/1 2/1 1/2/999/-1/{{ModId}}_full/0/{{ModId}}\\full",
+        "{{ModId}}_full2": "{{ModId}}_full2/table/1 2/1 1/2/999/-1/{{ModId}}_full2/0/{{ModId}}\\full2",
+        "{{ModId}}_window": "{{ModId}}_window/window/-1/-1/1/800/-1/{{ModId}}_window/0/{{ModId}}\\window_horizontal",
+        "{{ModId}}_lamp_simple": "{{ModId}}_lamp_simple/lamp/1 2/1 1/1/2000/-1/{{ModId}}_lamp_simple/0/{{ModId}}\\lamp_simple",
+        "{{ModId}}_2x1_horizontal": "{{ModId}}_2x1_horizontal/decor/2 2/2 1/1/999/-1/{{ModId}}_2x1_horizontal/0/{{ModId}}\\2x1_horizontal",
+        "{{ModId}}_1x2_vertical": "{{ModId}}_1x2_vertical/decor/2 2/2 1/1/999/-1/{{ModId}}_1x2_vertical/0/{{ModId}}\\1x2_vertical",
+        "{{ModId}}_2x2_full": "{{ModId}}_2x2_full/table/2 3/2 2/1/500/-1/{{ModId}}_2x2_full/0/{{ModId}}\\2x2_full"
+      }
+    },
+    // Dictionary<string, ConnectedTextureData>
+    {
+      "Action": "EditData",
+      "Target": "sophie.Calcifer/ConnectedTextures",
+      "Entries": {
+        "(F){{ModId}}_vertical": {
+          "Style": "Vertical",
+          "ConnectWith": [
+            "(BC){{ModId}}_vertical"
+          ]
+        },
+        "(F){{ModId}}_horizontal": {
+          "Style": "Horizontal",
+          "ConnectWith": [
+            "(BC){{ModId}}_horizontal"
+          ]
+        },
+        "(F){{ModId}}_horizontal2": {
+          "Style": "Horizontal",
+          "ConnectWith": [
+            "(BC){{ModId}}_horizontal2"
+          ]
+        },
+        "(F){{ModId}}_simple": {
+          "Style": "Simple",
+          "ConnectWith": [
+            "(F){{ModId}}_simple",
+            "(F){{ModId}}_simple2",
+            "(F){{ModId}}_lamp_simple"
+          ]
+        },
+        "(F){{ModId}}_simple2": {
+          "Style": "Simple",
+          "ConnectWith": [
+            "(F){{ModId}}_simple",
+            "(F){{ModId}}_simple2",
+            "(F){{ModId}}_lamp_simple"
+          ]
+        },
+        "(F){{ModId}}_lamp_simple": {
+          "Style": "Simple",
+          "ConnectWith": [
+            "(F){{ModId}}_simple",
+            "(F){{ModId}}_simple2",
+            "(BC)12"
+          ]
+        },
+        "(F){{ModId}}_full": {
+          "Style": "Full",
+          "ConnectWith": [
+            "(F){{ModId}}_full",
+            "(F){{ModId}}_full2"
+          ]
+        },
+        "(F){{ModId}}_full2": {
+          "Style": "Full",
+          "ConnectWith": [
+            "(F){{ModId}}_full",
+            "(F){{ModId}}_full2"
+          ]
+        },
+        "(F){{ModId}}_window": {
+          "Style": "Horizontal",
+          "ConnectWith": [
+            "(F){{ModId}}_window"
+          ]
+        },
+        "(F){{ModId}}_2x1_horizontal": {
+          "Style": "Horizontal",
+          "ConnectWith": [
+            "(F){{ModId}}_2x1_horizontal"
+          ]
+        },
+        "(F){{ModId}}_1x2_vertical": {
+          "Style": "Vertical",
+          "ConnectWith": [
+            "(F){{ModId}}_1x2_vertical"
+          ]
+        },
+        "(F){{ModId}}_2x2_full": {
+          "Style": "Full",
+          "ConnectWith": [
+            "(F){{ModId}}_2x2_full"
+          ]
+        }
+      }
+    },
+    // make sure offset is work
+    {
+      "Action": "EditData",
+      "Target": "sophie.Calcifer/FurnitureOffsets",
+      "Entries": {
+        "(F){{ModId}}_vertical": "0, -22",
+        "(F){{ModId}}_horizontal": "0, -22",
+        "(F){{ModId}}_horizontal2": "0, -22",
+        "(F){{ModId}}_simple": "0, -22",
+        "(F){{ModId}}_full": "0, -22",
+      }
+    }
+  ]
+}
