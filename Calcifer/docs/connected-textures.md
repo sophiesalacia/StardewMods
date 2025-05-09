@@ -12,7 +12,6 @@ You can use this with:
 You cannot use this with:
 - Furniture with rotations
 - Beds
-- Fish Tanks
 - Free Cactuses (randomized_plant)
 - Bigger Craftables
 - Furniture via Furniture Framework
@@ -29,6 +28,7 @@ To define connections, edit `sophie.Calcifer/ConnectedTextures` and add data lik
     "Entries": {
         // Qualified item id
         "(F){{ModId}}_simple": {
+            // REQUIRED
             "Style": "Simple", // one of "Horizontal", "Vertical", "Simple", "Full". More on this in following sections
             "ConnectWith": [
                 // Everything connects with itself
@@ -36,7 +36,13 @@ To define connections, edit `sophie.Calcifer/ConnectedTextures` and add data lik
                 // List of other items this item can connect into, they don't need to have `sophie.Calcifer/ConnectedTextures` entries (but it usually makes more sense if they did)
                 "(F){{ModId}}_simple2",
                 "(BC)12"
-            ]
+            ],
+            // OPTIONAL
+            // If this is a big craftable and it uses more than 1 sprite for any reason, use this to change the offsets accordingly
+            "ObjectOffset": 2,
+            // If this is a furniture and the default logic is failing to account for the full width or height of sprites, use this to change the offsets accordingly
+            // You can leave the one that does not need change at 0
+            "FurnitureOffset": "32,32"
         },
     }
 }

@@ -4,12 +4,12 @@
   "Changes": [
     {
       "Action": "Load",
-      "Target": "{{ModId}}/full,{{ModId}}/full2,{{ModId}}/horizontal,{{ModId}}/horizontal2,{{ModId}}/lamp_simple,{{ModId}}/simple,{{ModId}}/simple2,{{ModId}}/vertical,{{ModId}}/window_horizontal,{{ModId}}/2x1_horizontal,{{ModId}}/1x2_vertical,{{ModId}}/2x2_full",
+      "Target": "{{ModId}}/full,{{ModId}}/full2,{{ModId}}/horizontal,{{ModId}}/horizontal2,{{ModId}}/lamp_simple,{{ModId}}/simple,{{ModId}}/simple2,{{ModId}}/vertical,{{ModId}}/window_horizontal,{{ModId}}/2x1_horizontal,{{ModId}}/1x2_vertical,{{ModId}}/2x2_full,{{ModId}}/pot_simple,{{ModId}}/rug_simple,{{ModId}}/fishtank_horizontal",
       "FromFile": "assets/{{TargetWithoutPath}}.png"
     },
     {
       "Action": "Include",
-      "FromFile": "data/bigobjects.json,data/furniture.json"
+      "FromFile": "data/bigobjects.json, data/furniture.json"
     }
   ]
 }

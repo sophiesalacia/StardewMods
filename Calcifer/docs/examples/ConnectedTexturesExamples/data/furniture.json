@@ -16,7 +16,9 @@
         "{{ModId}}_lamp_simple": "{{ModId}}_lamp_simple/lamp/1 2/1 1/1/2000/-1/{{ModId}}_lamp_simple/0/{{ModId}}\\lamp_simple",
         "{{ModId}}_2x1_horizontal": "{{ModId}}_2x1_horizontal/decor/2 2/2 1/1/999/-1/{{ModId}}_2x1_horizontal/0/{{ModId}}\\2x1_horizontal",
         "{{ModId}}_1x2_vertical": "{{ModId}}_1x2_vertical/decor/2 2/2 1/1/999/-1/{{ModId}}_1x2_vertical/0/{{ModId}}\\1x2_vertical",
-        "{{ModId}}_2x2_full": "{{ModId}}_2x2_full/table/2 3/2 2/1/500/-1/{{ModId}}_2x2_full/0/{{ModId}}\\2x2_full"
+        "{{ModId}}_2x2_full": "{{ModId}}_2x2_full/table/2 3/2 2/1/500/-1/{{ModId}}_2x2_full/0/{{ModId}}\\2x2_full",
+        "{{ModId}}_rug_simple": "{{ModId}}_rug_simple/rug/1 1/1 1/1/999/-1/{{ModId}}_rug_simple/0/{{ModId}}\\rug_simple",
+        "{{ModId}}_fishtank_horizontal": "{{ModId}}_fishtank_horizontal/fishtank/2 3/2 1/1/1000/-1/{{ModId}}_fishtank_horizontal/0/{{ModId}}\\fishtank_horizontal/false/calcifer_fishtankcapacity_100",
       }
     },
     // Dictionary<string, ConnectedTextureData>
@@ -102,6 +104,18 @@
           "Style": "Full",
           "ConnectWith": [
             "(F){{ModId}}_2x2_full"
+          ]
+        },
+        "(F){{ModId}}_rug_simple": {
+          "Style": "Simple",
+          "ConnectWith": [
+            "{{ModId}}_rug_simple"
+          ]
+        },
+        "(F){{ModId}}_fishtank_horizontal": {
+          "Style": "Horizontal",
+          "ConnectWith": [
+            "(F){{ModId}}_fishtank_horizontal"
           ]
         }
       }

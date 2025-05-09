@@ -7,9 +7,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
+using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI.Events;
+using StardewValley.ItemTypeDefinitions;
 using StardewValley.Objects;
 
 namespace Calcifer.Features;
@@ -218,7 +221,7 @@ class ConnectedTextures
         if (offset == 0)
             return;
         obj.modData[ConnectedTextureApplied] = "T";
-        obj.ParentSheetIndex += offset;
+        obj.ParentSheetIndex += offset * connectedTextureData.ObjectOffset;
     }
 
     // APPLY TEXTURES: FURNITURE
@@ -255,7 +258,7 @@ class ConnectedTextures
         if (!forceCheck && furniture.modData.ContainsKey(ConnectedTextureApplied))
             return;
         // TODO: implement support for these?
-        if (furniture.rotations.Value > 0 || furniture is FishTankFurniture || furniture is RandomizedPlantFurniture || furniture is BedFurniture)
+        if (furniture is RandomizedPlantFurniture || furniture is BedFurniture)
             return;
 
         if (!Data.TryGetValue(furniture.QualifiedItemId, out ConnectedTextureData? connectedTextureData))
@@ -267,12 +270,31 @@ class ConnectedTextures
 
         Texture2D texture = ItemRegistry.GetDataOrErrorItem(furniture.QualifiedItemId).GetTexture();
         Rectangle defaultSourceRect = furniture.defaultSourceRect.Value;
-        int rectWidth = defaultSourceRect.Width;
-        // HARDCODING: windows & lamps may have sourceIndexOffset.Value=1 which means twice as much width considered for
-        if (furniture.furniture_type.Value == Furniture.window || Furniture_isLampStyleLightSource(furniture))
+
+        int rectWidth;
+        int rectHeight;
+        if (connectedTextureData.FurnitureOffset != Point.Zero)
         {
-            rectWidth += defaultSourceRect.Width;
+            rectWidth = connectedTextureData.FurnitureOffset.X > 0 ? connectedTextureData.FurnitureOffset.X : defaultSourceRect.Width;
+            rectHeight = connectedTextureData.FurnitureOffset.Y > 0 ? connectedTextureData.FurnitureOffset.Y : defaultSourceRect.Height;
         }
+        else
+        {
+            rectWidth = defaultSourceRect.Width;
+            rectHeight = defaultSourceRect.Height;
+            // HARDCODING: windows & lamps may have sourceIndexOffset.Value=1 which means twice as much width considered for
+            // HARDCODING: fish tanks have a second sprite for the glass, so twice as much width
+            if (furniture is FishTankFurniture || furniture.furniture_type.Value == Furniture.window || Furniture_isLampStyleLightSource(furniture))
+            {
+                rectWidth += defaultSourceRect.Width;
+            }
+        }
+        if (rectWidth == 0 || rectHeight == 0)
+        {
+            Log.Trace($"Error: zero width/height for furniture bounds on {furniture.QualifiedItemId}");
+            return;
+        }
+
         int newX = defaultSourceRect.X;
         int newY = defaultSourceRect.Y;
         for (int i = offset; i > 0; i--)
@@ -281,11 +303,12 @@ class ConnectedTextures
             if (newX >= texture.Width)
             {
                 newX = 0;
-                newY += defaultSourceRect.Height;
+                newY += rectHeight;
             }
         }
+
         furniture.defaultSourceRect.Value = new(newX, newY, defaultSourceRect.Width, defaultSourceRect.Height);
-        furniture.sourceRect.Value = furniture.defaultSourceRect.Value;
+        furniture.updateRotation();
         furniture.modData[ConnectedTextureApplied] = "T";
     }
 
@@ -549,10 +572,121 @@ class ConnectedTextures
         return 0;
     }
 
-
     public record class ConnectedTextureData
     {
+        /// <summary>Connection style</summary>
         public ConnectionStyle Style { get; set; }
+        /// <summary>What objects this object connects with</summary>
         public List<string>? ConnectWith { get; set; }
+        /// <summary>Usually the sprite offset for a big craftable is 1 index, can change it here</summary>
+        public int ObjectOffset { get; set; } = 1;
+        /// <summary>Usually the width offset for furniture is based on it's default source rect, can change it here</summary>
+        public Point FurnitureOffset { get; set; } = Point.Zero;
     }
+}
+
+
+
+[HarmonyPatch]
+class ConnectedTextures_DrawFix
+{
+    private static int? GetParentSheetIndex(int? previous, IndoorPot pot)
+    {
+        return previous ?? pot.ParentSheetIndex;
+    }
+
+    /// <summary>
+    /// Harmony patch to make IndoorPot.draw respect parent sheet index so that connected texture can work.
+    /// Could perhaps use similar transpilers on other misbehaving draws
+    /// </summary>
+    /// <param name="instructions"></param>
+    /// <param name="generator"></param>
+    /// <returns></returns>
+    [HarmonyPatch(nameof(IndoorPot), nameof(IndoorPot.draw))]
+    [HarmonyTranspiler]
+    public static IEnumerable<CodeInstruction> IndoorPot_draw_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    {
+        try
+        {
+            // IL_00d1: ldc.i4.0
+            // IL_00d2: cgt.un
+            // IL_00d4: ldloca.s 4
+            // IL_00d6: initobj valuetype [System.Runtime]System.Nullable`1<int32>
+            // IL_00dc: ldloc.s 4
+            // IL_00de: callvirt instance valuetype [MonoGame.Framework]Microsoft.Xna.Framework.Rectangle StardewValley.ItemTypeDefinitions.ParsedItemData::GetSourceRect(int32, valuetype [System.Runtime]System.Nullable`1<int32>)
+
+            // dataOrErrorItem.GetSourceRect(showNextIndex.Value ? 1 : 0, null)
+            CodeMatcher matcher = new(instructions, generator);
+
+            matcher
+            .MatchEndForward([
+                new(OpCodes.Cgt_Un),
+                new(inst => inst.IsLdloc()),
+                new(OpCodes.Initobj, typeof(int?)),
+                new(inst => inst.IsLdloc()),
+                new(OpCodes.Callvirt, AccessTools.DeclaredMethod(typeof(ParsedItemData), nameof(ParsedItemData.GetSourceRect)))
+            ])
+            .ThrowIfNotMatch("Failed to find '-.GetSourceRect(- ? - : 0, null)'")
+            .InsertAndAdvance([
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Call, AccessTools.DeclaredMethod(typeof(ConnectedTextures_DrawFix), nameof(GetParentSheetIndex)))
+            ]);
+
+            return matcher.Instructions();
+        }
+        catch (Exception err)
+        {
+            Log.Error($"Error in ConnectedTextures_DrawFix::IndoorPot_draw_Transpiler:\n{err}");
+            return instructions;
+        }
+    }
+
+    private static Rectangle GetDefaultSourceRect(Rectangle rectangle, FishTankFurniture furniture)
+    {
+        return furniture.defaultSourceRect.Value;
+    }
+
+    /// <summary>Fix the fish tank glass draw layer</summary>
+    /// <param name="instructions"></param>
+    /// <param name="generator"></param>
+    /// <returns></returns>
+    [HarmonyPatch(nameof(FishTankFurniture), nameof(FishTankFurniture.draw))]
+    [HarmonyTranspiler]
+    public static IEnumerable<CodeInstruction> FishTankFurniture_draw_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
+    {
+        try
+        {
+            // IL_0092: ldc.i4.0
+            // IL_0093: ldloca.s 4
+            // IL_0095: initobj valuetype [System.Runtime]System.Nullable`1<int32>
+            // IL_009b: ldloc.s 4
+            // IL_009d: callvirt instance valuetype [MonoGame.Framework]Microsoft.Xna.Framework.Rectangle StardewValley.ItemTypeDefinitions.ParsedItemData::GetSourceRect(int32, valuetype [System.Runtime]System.Nullable`1<int32>)
+
+            // dataOrErrorItem.GetSourceRect(showNextIndex.Value ? 1 : 0, null)
+            CodeMatcher matcher = new(instructions, generator);
+
+            matcher
+            .MatchEndForward([
+                new(OpCodes.Ldc_I4_0),
+                new(inst => inst.IsLdloc()),
+                new(OpCodes.Initobj, typeof(int?)),
+                new(inst => inst.IsLdloc()),
+                new(OpCodes.Callvirt, AccessTools.DeclaredMethod(typeof(ParsedItemData), nameof(ParsedItemData.GetSourceRect)))
+            ])
+            .ThrowIfNotMatch("Failed to find '-.GetSourceRect(0, null)'")
+            .Advance(1)
+            .InsertAndAdvance(
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Call, AccessTools.DeclaredMethod(typeof(ConnectedTextures_DrawFix), nameof(GetDefaultSourceRect)))
+            );
+
+            return matcher.Instructions();
+        }
+        catch (Exception err)
+        {
+            Log.Error($"Error in ConnectedTextures_DrawFix::IndoorPot_draw_Transpiler:\n{err}");
+            return instructions;
+        }
+    }
+
 }
