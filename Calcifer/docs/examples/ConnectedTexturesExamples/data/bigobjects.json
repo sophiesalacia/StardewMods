@@ -44,9 +44,20 @@
           "CanBePlacedIndoors": true,
           "Texture": "{{ModId}}/simple",
           "SpriteIndex": 0
-        }
+        },
       }
     },
+    // // garden pot
+    // {
+    //   "Action": "EditData",
+    //   "Target": "Data/BigCraftables",
+    //   "Fields": {
+    //     "62": {
+    //       "Texture": "{{ModId}}/pot_simple",
+    //       "SpriteIndex": 0
+    //     }
+    //   }
+    // },
     // Dictionary<string, ConnectedTextureData>
     {
       "Action": "EditData",
@@ -75,7 +86,14 @@
           "ConnectWith": [
             "(BC){{ModId}}_simple"
           ]
-        }
+        },
+        // "(BC)62": {
+        //   "Style": "Simple",
+        //   "ConnectWith": [
+        //     "(BC)62"
+        //   ],
+        //   "ObjectOffset": 2
+        // }
       }
     },
   ]
