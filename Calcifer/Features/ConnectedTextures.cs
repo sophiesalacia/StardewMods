@@ -144,7 +144,7 @@ class ConnectedTextures
     // AA   AA--
     // BB   --BB
     // </summary>
-    public static bool FurnitureContainsAndAligned(Furniture furniture, Vector2 neighbourTile, Rectangle bounds)
+    public static bool Furniture_ContainsAndAligned(Furniture furniture, Vector2 neighbourTile, Rectangle bounds)
     {
         Rectangle neighbourBounds = FurnitureTileBounds(furniture);
         if (!neighbourBounds.Contains(neighbourTile))
@@ -158,7 +158,10 @@ class ConnectedTextures
         return true;
     }
 
-    /// <summary>Update neighbour object/furnitures</summary>
+    /// <summary>
+    // Update neighbour object/furnitures.
+    // Duplicate work potentially happen, but usually furniture changes one at a time.
+    // </summary>
     private static void UpdateNeighbours(GameLocation where, Rectangle bounds)
     {
         foreach (Vector2 neighbourTile in Neighbour_All(bounds))
@@ -167,7 +170,7 @@ class ConnectedTextures
             {
                 Object_UpdateParentSheetIndex(where, neighbourTile, neighbourObj, true);
             }
-            if (where.furniture.FirstOrDefault(f => FurnitureContainsAndAligned(f, neighbourTile, bounds)) is Furniture neighbourFurniture)
+            foreach (Furniture neighbourFurniture in where.furniture.Where(f => Furniture_ContainsAndAligned(f, neighbourTile, bounds)))
             {
                 Furniture_UpdateSourceRect(where, neighbourFurniture, true);
             }
@@ -252,6 +255,13 @@ class ConnectedTextures
         }
     }
 
+    /// <summary>Check if two furniture are perhaps connected, DOES NOT DO NEIGHBOUR CHECK</summary>
+    internal static bool Furniture_IsConnected(Furniture furnitureA, Furniture furnitureB)
+    {
+        return (Data.TryGetValue(furnitureA.QualifiedItemId, out ConnectedTextureData? ctdA) && ctdA.ConnectWith != null && Connects(furnitureB.QualifiedItemId, ctdA.ConnectWith)) ||
+                (Data.TryGetValue(furnitureB.QualifiedItemId, out ConnectedTextureData? ctdB) && ctdB.ConnectWith != null && Connects(furnitureB.QualifiedItemId, ctdB.ConnectWith));
+    }
+
     /// <summary>Update furniture source rect</summary>
     private static void Furniture_UpdateSourceRect(GameLocation where, Furniture furniture, bool forceCheck = false)
     {
@@ -263,7 +273,7 @@ class ConnectedTextures
 
         if (!Data.TryGetValue(furniture.QualifiedItemId, out ConnectedTextureData? connectedTextureData))
             return;
-        int offset = CalculateOffset(where, new((int)furniture.TileLocation.X, (int)furniture.TileLocation.Y, furniture.getTilesWide(), furniture.getTilesHigh()), connectedTextureData);
+        int offset = CalculateOffset(where, FurnitureTileBounds(furniture), connectedTextureData);
         Furniture_ResetSourceRect(furniture);
         if (offset == 0)
             return;
@@ -335,7 +345,7 @@ class ConnectedTextures
         }
     }
 
-    private static IEnumerable<Vector2> Neighbour_All(Rectangle bounds)
+    internal static IEnumerable<Vector2> Neighbour_All(Rectangle bounds)
     {
         for (int i = bounds.X - 1; i <= bounds.Right; i++)
         {
@@ -351,7 +361,7 @@ class ConnectedTextures
     /// <summary>Get right side neighbours</summary>
     /// <param name="bounds"></param>
     /// <returns></returns>
-    private static IEnumerable<Vector2> Neighbour_Right(Rectangle bounds)
+    internal static IEnumerable<Vector2> Neighbour_Right(Rectangle bounds)
     {
         for (int i = bounds.Y; i < bounds.Bottom; i++)
             yield return new(bounds.X + bounds.Width, i);
@@ -360,7 +370,7 @@ class ConnectedTextures
     /// <summary>Get left side neighbours</summary>
     /// <param name="bounds"></param>
     /// <returns></returns>
-    private static IEnumerable<Vector2> Neighbour_Left(Rectangle bounds)
+    internal static IEnumerable<Vector2> Neighbour_Left(Rectangle bounds)
     {
         for (int i = bounds.Y; i < bounds.Bottom; i++)
             yield return new(bounds.X - 1, i);
@@ -369,7 +379,7 @@ class ConnectedTextures
     /// <summary>Get up side neighbours</summary>
     /// <param name="bounds"></param>
     /// <returns></returns>
-    private static IEnumerable<Vector2> Neighbour_Up(Rectangle bounds)
+    internal static IEnumerable<Vector2> Neighbour_Up(Rectangle bounds)
     {
         for (int i = bounds.X; i < bounds.Right; i++)
             yield return new(i, bounds.Y - 1);
@@ -378,7 +388,7 @@ class ConnectedTextures
     /// <summary>Get up side neighbours</summary>
     /// <param name="bounds"></param>
     /// <returns></returns>
-    private static IEnumerable<Vector2> Neighbour_Down(Rectangle bounds)
+    internal static IEnumerable<Vector2> Neighbour_Down(Rectangle bounds)
     {
         // up
         for (int i = bounds.X; i < bounds.Right; i++)
@@ -430,7 +440,7 @@ class ConnectedTextures
             return true;
 
         // furniture
-        if (where.furniture.FirstOrDefault(f => FurnitureContainsAndAligned(f, tile, bounds)) is Furniture furniture && Connects(furniture.QualifiedItemId, connections))
+        if (where.furniture.Any(f => Furniture_ContainsAndAligned(f, tile, bounds) && Connects(f.QualifiedItemId, connections)))
             return true;
 
         return false;

@@ -7,7 +7,7 @@ Feature to create modular objects and furniture that change appearance based on 
 
 You can use this with:
 - Most placable objects and big craftables, as long as they obey ParentSheetIndex
-- Most furniture without rotations
+- Most furniture, as long as they obey SourceRect
 
 You cannot use this with:
 - Furniture with rotations
@@ -82,9 +82,7 @@ _Sprite Count: 47_
 
 Connect in the four cardinal directions (up down left right) and the four ordinal directions (up/left, up/right, bottom/left, bottom/right).
 
-![full 47 sprites](./examples/ConnectedTexturesExamples/assets/simple.png)
-
-For a larger object (i.e. furniture), we check these
+![full 47 sprites](./examples/ConnectedTexturesExamples/assets/rug_full.png)
 
 ### Determining Connections
 
@@ -131,6 +129,12 @@ Like in vanilla, you need to have a second texture offset to the right for the r
 ![window 4*2 sprites](./examples/ConnectedTexturesExamples/assets/window_horizontal.png)
 
 ![lamp 16*2 sprites](./examples/ConnectedTexturesExamples/assets/lamp_simple.png)
+
+### Overriding the Default Offset
+
+When using these with a machine that has some number of working sprites, you should provide a `ObjectOffset` with the right amount of sprite index offset to account for all the extra frames.
+
+The `FurnitureOffset` serves a similar purpose for furniture texture that are bigger than expected. e.g. if they have rotations.
 
 ### Examples
 
