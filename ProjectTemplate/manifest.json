@@ -1,10 +1,18 @@
-﻿{
-    "Name": "ProjectTemplate",
-    "Author": "sophie",
-    "Version": "0.1.0",
-    "Description": "Template project with basic boilerplate for settings up mods.",
-    "UniqueID": "sophie.ProjectTemplate",
-    "EntryDll": "ProjectTemplate.dll",
-    "MinimumApiVersion": "3.13.0",
-    "UpdateKeys": []
+{
+  /*
+   | This file is automatically updated by ModManifestBuilder
+   | when the project is compiled.
+   | 
+   | Changes made to this file may be overwritten.
+   | 
+   */
+  "$schema": "https://smapi.io/schemas/manifest.json",
+  "UniqueID": "sophie.ProjectTemplate",
+  "Name": "ProjectTemplate",
+  "Author": "sophie",
+  "Version": "0.1.0-Debug",
+  "Description": "Template project with basic boilerplate for settings up mods.",
+  "MinimumApiVersion": "3.13.0",
+  "EntryDll": "ProjectTemplate.dll",
+  "UpdateKeys": []
 }

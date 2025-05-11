@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Calcifer.EventHooks;
 using HarmonyLib;
 using StardewModdingAPI.Events;
 using StardewValley.Delegates;

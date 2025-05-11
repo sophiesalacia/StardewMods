@@ -12,12 +12,12 @@
   "Author": "sophie",
   "Version": "0.1.0-Debug",
   "Description": "Framework for custom achievements.",
-  "MinimumApiVersion": "4.1",
+  "MinimumApiVersion": "4.2",
   "EntryDll": "CustomAchievementsRedux.dll",
   "Dependencies": [
     {
       "UniqueID": "Pathoschild.ContentPatcher",
-      "MinimumVersion": "2.4"
+      "MinimumVersion": "2.5"
     }
   ],
   "UpdateKeys": [

@@ -10,9 +10,9 @@
   "UniqueID": "sophie.ConfigurableSpecialOrdersUnlock",
   "Name": "Configurable Special Orders Unlock",
   "Author": "sophie",
-  "Version": "0.2.1",
+  "Version": "0.2.1-Debug",
   "Description": "Mod to configure the unlock requirements of the Special Orders Board.",
-  "MinimumApiVersion": "4.0",
+  "MinimumApiVersion": "4.2",
   "EntryDll": "ConfigurableSpecialOrdersUnlock.dll",
   "UpdateKeys": [
     "Nexus:8690"

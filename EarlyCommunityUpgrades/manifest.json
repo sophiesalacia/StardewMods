@@ -1,10 +1,18 @@
-﻿{
-    "Name": "Calcifer",
-    "Author": "sophie",
-    "Version": "0.1.0",
-    "Description": "Core mod and various utilities.",
-    "UniqueID": "sophie.Calcifer",
-    "EntryDll": "Calcifer.dll",
-    "MinimumApiVersion": "4.0.0-alpha",
-    "UpdateKeys": []
+{
+  /*
+   | This file is automatically updated by ModManifestBuilder
+   | when the project is compiled.
+   | 
+   | Changes made to this file may be overwritten.
+   | 
+   */
+  "$schema": "https://smapi.io/schemas/manifest.json",
+  "UniqueID": "sophie.Calcifer",
+  "Name": "Calcifer",
+  "Author": "sophie",
+  "Version": "0.1.0-Debug",
+  "Description": "Core mod and various utilities.",
+  "MinimumApiVersion": "4.0.0-alpha",
+  "EntryDll": "EarlyCommunityUpgrades.dll",
+  "UpdateKeys": []
 }

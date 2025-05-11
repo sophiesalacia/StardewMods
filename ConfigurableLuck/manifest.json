@@ -10,9 +10,9 @@
   "UniqueID": "sophie.ConfigurableLuck",
   "Name": "Configurable Luck",
   "Author": "sophie",
-  "Version": "0.3.0",
+  "Version": "0.3.0-Debug",
   "Description": "Allows you to set your luck value manually.",
-  "MinimumApiVersion": "4.0",
+  "MinimumApiVersion": "4.2",
   "EntryDll": "ConfigurableLuck.dll",
   "UpdateKeys": [
     "Nexus:14610"

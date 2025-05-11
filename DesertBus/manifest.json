@@ -12,7 +12,7 @@
   "Author": "sophie",
   "Version": "0.1.0-Debug",
   "Description": "Very serious mod for serious public transit enjoyers.",
-  "MinimumApiVersion": "4.1",
+  "MinimumApiVersion": "4.2",
   "EntryDll": "DesertBus.dll",
   "Dependencies": [
     {

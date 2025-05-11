@@ -1,9 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Calcifer.EventHooks;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI.Events;
 using StardewValley.Delegates;

@@ -12,7 +12,7 @@
   "Author": "sophie",
   "Version": "0.1.0-Debug",
   "Description": "Description pending.",
-  "MinimumApiVersion": "4.0",
+  "MinimumApiVersion": "4.2",
   "EntryDll": "Eavesdrop.dll",
   "Dependencies": [
     {

@@ -1,4 +1,3 @@
-using StardewModdingAPI;
 using StardewModdingAPI.Events;
 
 namespace SophieShared;

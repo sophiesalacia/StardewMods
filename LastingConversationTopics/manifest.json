@@ -10,9 +10,9 @@
   "UniqueID": "sophie.LastingConversationTopics",
   "Name": "Lasting Conversation Topics",
   "Author": "sophie",
-  "Version": "0.2.1",
+  "Version": "0.3.0-Debug",
   "Description": "Extends given conversation topics indefinitely.",
-  "MinimumApiVersion": "4.0",
+  "MinimumApiVersion": "4.2",
   "EntryDll": "LastingConversationTopics.dll",
   "UpdateKeys": [
     "Nexus:14377@LastingConversationTopics"

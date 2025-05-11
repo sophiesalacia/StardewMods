@@ -1,5 +1,3 @@
-using StardewModdingAPI;
-
 namespace SophieShared;
 
 // Credit to kittycatcasey
