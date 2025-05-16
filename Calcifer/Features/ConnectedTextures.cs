@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -375,7 +376,8 @@ class ConnectedTextures
         };
     }
 
-    private static bool ConnectsToSide(GameLocation where, Vector2 direction, Rectangle bounds, IList<string> connections)
+    public static bool ConnectsToSide(GameLocation where, Vector2 direction, Rectangle bounds, IList<string> connections,
+        [NotNullWhen(true)] out StardewValley.Object? selected, IEnumerable<Furniture>? furniture = null)
     {
         if (
             // is single tile on checked axis
@@ -383,11 +385,13 @@ class ConnectedTextures
             (bounds.Height is 1 && (bounds.Width is 1 || direction.X is 0))
         )
         {
-            if (where.Objects.TryGetValue(new(bounds.X + direction.X * bounds.Width, bounds.Y + direction.Y * bounds.Height), out var obj))
-                return Connects(obj.QualifiedItemId, connections);
+            if (where.Objects.TryGetValue(new(bounds.X + direction.X * bounds.Width, bounds.Y + direction.Y * bounds.Height), out selected))
+                return Connects(selected.QualifiedItemId, connections);
         }
 
-        return where.furniture.Any(f => Furniture_ConnectedAndAligned(f, bounds, direction, connections));
+        furniture ??= where.furniture;
+        selected = furniture.FirstOrDefault(f => Furniture_ConnectedAndAligned(f, bounds, direction, connections));
+        return selected is not null;
     }
 
     private static bool Furniture_ConnectedAndAligned(Furniture f, Rectangle bounds, Vector2 direction, IList<string> connections)
@@ -470,7 +474,7 @@ class ConnectedTextures
         int corners = 0;
         int[] checks = CornersToCheck[checkCorner];
         for (int i = 0; i < checks.Length; i++)
-            corners |= ConnectsToSide(where, CornerCoords[checks[i]], bounds, connections) ? (1 << i) : 0;
+            corners |= ConnectsToSide(where, CornerCoords[checks[i]], bounds, connections, out _) ? (1 << i) : 0;
 
         // if no corners exist, use the default index
         if (corners is 0)
@@ -536,7 +540,7 @@ class ConnectedTextures
     /// <returns></returns>
     private static int NeighbourOffsetCheck(GameLocation where, Rectangle bounds, IList<string> connections, Vector2 direction, int directionalValue)
     {
-        return ConnectsToSide(where, direction, bounds, connections) ? directionalValue : 0;
+        return ConnectsToSide(where, direction, bounds, connections, out _) ? directionalValue : 0;
     }
 
     public record class ConnectedTextureData

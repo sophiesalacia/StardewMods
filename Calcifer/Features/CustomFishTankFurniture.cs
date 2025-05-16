@@ -131,16 +131,20 @@ class CustomFishTankFurniture
     private static void RightOnlyDFS_FishTank(Dictionary<FishTankFurniture, FishTankInfo> maybeConnectedTanks, FishTankFurniture tank, FishTankInfo tankInfo, ref List<(FishTankFurniture, FishTankInfo)> needUpdate)
     {
         needUpdate.Add(new(tank, tankInfo));
-        Rectangle bounds = ConnectedTextures.FurnitureTileBounds(tank);
-        foreach (Vector2 neighbourTile in ConnectedTextures.Neighbour_Right(bounds))
-        {
-            if (maybeConnectedTanks.FirstOrDefault(kv => ConnectedTextures.Furniture_ContainsAndAligned(kv.Key, neighbourTile, bounds) &&
-                ConnectedTextures.Furniture_IsConnected(tank, kv.Key)) is KeyValuePair<FishTankFurniture, FishTankInfo> neighbourTank &&
-                neighbourTank.Key != null && neighbourTank.Value != null)
-            {
-                RightOnlyDFS_FishTank(maybeConnectedTanks, neighbourTank.Key, neighbourTank.Value, ref needUpdate);
-            }
-        }
+
+        if (!ConnectedTextures.Data.TryGetValue(tank.QualifiedItemId, out var data) || data.ConnectWith is not IList<string> connections)
+            return;
+
+        if (!ConnectedTextures.ConnectsToSide(
+            tank.Location, new(1, 0), ConnectedTextures.FurnitureTileBounds(tank),
+            connections, out var found, maybeConnectedTanks.Keys
+        ))
+            return;
+
+        if (found is not FishTankFurniture tank2)
+            return;
+
+        RightOnlyDFS_FishTank(maybeConnectedTanks, tank2, maybeConnectedTanks[tank2], ref needUpdate);
     }
 
     /// <summary>Convert context tag to FishTankInfo</summary>
