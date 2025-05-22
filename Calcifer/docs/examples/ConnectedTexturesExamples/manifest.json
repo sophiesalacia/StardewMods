@@ -1,0 +1,12 @@
+{
+    "Name": "[CP] Connected Textures Examples",
+    "Author": "debug",
+    "Version": "1.0.0",
+    "Description": "Example pack for connected textures.",
+    "UniqueID": "debug.CT",
+    "MinimumApiVersion": "4.0.0",
+    "ContentPackFor": {
+        "UniqueID": "Pathoschild.ContentPatcher"
+    },
+    "Dependencies": []
+}
