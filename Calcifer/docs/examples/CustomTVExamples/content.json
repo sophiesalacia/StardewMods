@@ -1,0 +1,40 @@
+{
+  "$schema": "https://smapi.io/schemas/content-patcher.json",
+  "Format": "2.6.0",
+  "Changes": [
+    {
+      "Action": "Load",
+      "Target": "{{ModId}}/tv_horizontal",
+      "FromFile": "assets/{{TargetWithoutPath}}.png"
+    },
+    {
+      "Action": "EditData",
+      "Target": "Data/Furniture",
+      "Entries": {
+        // floor TV
+        "{{ModId}}_tv_horizontal": "{{ModId}}_tv_horizontal/decor/3 4/3 1/1/2500/2/{{ModId}}_tv_horizontal/0/{{ModId}}\\tv_horizontal/false/calcifer_tv_x12y-148s4",
+        // wall TV
+        "{{ModId}}_tv_horizontal_wall": "{{ModId}}_tv_horizontal_wall/painting/3 4/3 3/1/2500/2/{{ModId}}_tv_horizontal_wall/0/{{ModId}}\\tv_horizontal/false/calcifer_tv_x12y-20s4",
+      }
+    },
+    // works with ConnectedTextures
+    {
+      "Action": "EditData",
+      "Target": "sophie.Calcifer/ConnectedTextures",
+      "Entries": {
+        "(F){{ModId}}_tv_horizontal": {
+          "Style": "Horizontal",
+          "ConnectWith": [
+            "(F){{ModId}}_tv_horizontal"
+          ]
+        },
+        "(F){{ModId}}_tv_horizontal_wall": {
+          "Style": "Horizontal",
+          "ConnectWith": [
+            "(F){{ModId}}_tv_horizontal_wall"
+          ]
+        }
+      }
+    },
+  ]
+}
